@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="/static/css/home_style.css" />
+    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-bar">
+        <h2 id="logo">SITE</h2>
+
+        <nav class="nav-bar">
+          <div class="main-options">
+            <ul>
+              <li class="option page">
+                <a href="{{url_for('home')}}">Página Inicial</a>
+              </li>
+              <li class="option"><a href="#">Fórum</a></li>
+              <li class="option"><a href="{{url_for('question_create_page')}}">Fazer uma Pergunta</a></li>
+              <li class="option"><a href="{{url_for('ia_page')}}">Type IA</a></li>
+            </ul>
+          </div>
+          <div class="sec-options">
+            <ul>
+              <li class="option"><a href="{{url_for('customization_settings')}}">Configurações</a></li>
+              <li class="option">
+                <a
+                  href="{{url_for('profile', username=session.get('username'))}}"
+                  >Perfil</a
+                >
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="content">
+        <div class="main-content">
+          <header>
+            <form action="{{url_for('search')}}" method="post">
+
+              <div class="search-input">
+                <input name="search-input" type="text" value="{{pesquisa if pesquisa!= '' else ''}}" placeholder="O que você procura?" />
+                <button id="search-btn">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+          </form>
+
+          <div class="question-picker-container">
+            <ul>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Curso Técnico')}}">Curso Técnico</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Física')}}">Física</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='História')}}">História</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Matemática')}}">Matemática</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Português')}}">Português</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Química')}}">Química</a></li>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='todas')}}">...</a></li>
+            </ul>            
+          </div>
+
+          </header>
+
+          
+
+          <div class="question-container">
+            <div class="question-container">
+              {% if perguntas %}
+                {% for pergunta in perguntas %}
+                  <div class="comment">
+                    <div class="comment-content">
+                      <div>
+                        <div class="comment-header">
+                          <div>
+                            <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
+                            <p class="question-username">@{{ pergunta[6] }}</p>
+                            -
+                            <p class="user-position">{{ pergunta[3] }}</p>
+                          </div>
+                          <div>
+                            <p>publicado em <b>{{ pergunta[5] }}</b></p>
+                            {% if session.get('username') == pergunta[6] %}
+                              <a id="delete-comment-btn" href="{{url_for('delete_comment', comentario_id=pergunta[0])}}"><i class="fa-solid fa-trash"></i></a>
+                            {% endif %}
+                          </div>
+                          
+                        </div>
+                
+                        <div class="comment-body">
+                          <div class="question-title-container">
+                            <h2 class="question-title">{{ pergunta[1] }}</h2>
+                          </div>
+                          <div class="question-body">
+                            <p>{{ pergunta[2] }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+              
+                      <div class="comment-footer">
+                        <div>
+                          <a class="answer-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Responder</a>
+                          <a class="show-responses-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver respostas</a>
+                        </div>
+                        
+                        <p>{{ pergunta[4] }}</p>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                  <h2 id="no-found-error">Nenhum resultado encontrado...</h2>
+              {% endif %}
+            </div>
+            
+
+            </div>
+          </div>
+        <div class="sec-content">
+          <div class="btn-container">
+            <button class="create-question-btn"><a href="{{url_for('question_create_page')}}">Faça uma pergunta</a> </button>
+          </div>
+          <div class="sec-btn-container">
+            <butto class="comment-history-btn" type="button"><a href="">Histórico de comentários</a></button>
+          </div>
+
+        </div>
+
+      </div>
+
+        
+      </div>
+    </div>
+
+    <script src="/static/js/appearance.js"></script>
+  </body>
+</html>

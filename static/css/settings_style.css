@@ -1,0 +1,218 @@
+/* CONFIGURAÇÃO */
+
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+:root {
+  --light-blue: rgb(0, 132, 255);
+  --blue: rgb(0, 102, 255);
+  --main-bg: #ffffff;
+  --sec-bg: #ebebee;
+  --hover-bg: #d9d9e0;
+  --font-color: #575757;
+  --border: rgb(197, 197, 197);
+  --border-radius: 0.6rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, sans-serif;
+  color: var(--font-color);
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(120deg, var(--blue), var(--light-blue));
+}
+
+button {
+  cursor: pointer;
+}
+
+/* CONTAINER */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--main-bg);
+  width: 90%;
+  height: 92%;
+  border-radius: var(--border-radius);
+}
+
+.container .left-bar {
+  display: flex;
+  flex-direction: column;
+  min-width: 27rem;
+  background-color: var(--main-bg);
+  border-bottom-left-radius: var(--border-radius);
+  height: 100%;
+  justify-content: center;
+}
+
+.left-bar hr {
+  width: 80%;
+  align-self: center;
+}
+
+.container .left-bar #logo {
+  position: relative;
+  bottom: 24%;
+  text-align: center;
+}
+
+.container .nav-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.container .nav-bar ul {
+  display: flex;
+  padding: 2rem;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+}
+
+.container .option.page {
+  font-weight: 700;
+}
+
+.container .nav-bar .option {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1.6rem;
+  padding: 1rem;
+  transition: 0.3s background;
+  border-radius: 0.2rem;
+  width: 100%;
+}
+
+.container .nav-bar .option i {
+  font-size: 1.6rem;
+}
+
+.container .nav-bar .option a {
+  text-decoration: none;
+  color: var(--font-color);
+  font-size: 1.8rem;
+}
+
+.container .nav-bar .option:hover {
+  background-color: var(--hover-bg);
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 1rem;
+}
+
+/* CONTEÚDO PRINCIPAL DA PÁGINA */
+
+.content-header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 8rem;
+  gap: 0.2rem;
+}
+
+.content-header .page-header {
+  display: flex;
+  align-items: center;
+  background-color: var(--main-bg);
+  min-height: 8rem;
+  width: 100%;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  border-bottom: 0.2rem solid var(--sec-bg);
+}
+
+.content-header .page-header #back-home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 2rem;
+  border: none;
+  background-color: transparent;
+  padding: 0.4rem;
+  font-weight: 600;
+  border-radius: 0.2rem;
+  width: 4rem;
+  height: 4rem;
+  transition: 0.3s background-color;
+  text-decoration: none;
+  text-align: center;
+}
+
+.content-header .page-header #back-home-btn:hover {
+  background-color: var(--sec-bg);
+}
+
+/* MENU DE OPÇOES */
+
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+}
+
+.settings-container div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 48%;
+  height: 90%;
+}
+
+.settings-container .options-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0.2rem 0.2rem 0.6rem rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+}
+
+/* OPÇÕES */
+
+.settings-option {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.8rem;
+  border-bottom: 0.1rem solid var(--border);
+  width: 100% !important;
+  height: 5rem !important;
+}
+
+.settings-option h2 {
+  font-weight: 400;
+}
+
+.settings-option select {
+  outline: none;
+  padding: 0.4rem;
+  border-radius: 0.6rem;
+  border: none;
+  background-color: var(--sec-bg);
+  width: 40%;
+  height: 3.8rem;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOME</title>
+    <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
+
+    <link rel="stylesheet" href="/static/css/register_style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>WELCOME</h2>
+
+      <form id="register" action="/register" method="post">
+        <div class="input">
+          <input type="text" name="name" placeholder="name" />
+        </div>
+
+        <div class="input">
+          <input type="text" name="username" placeholder="username" required />
+        </div>
+
+        <div class="input">
+          <input
+            type="password"
+            id="password_input"
+            name="password"
+            placeholder="••••••••••••"
+            required
+          />
+          <button type="button" id="btn-showpassword">
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+
+        <div class="input">
+          <input type="email" name="email" placeholder="example@email.com" />
+        </div>
+
+        <select name="position" id="position">
+          <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+          <option value="PROFESSOR">PROFESSOR</option>
+          <option value="MONITOR">MONITOR</option>
+          <option value="ALUNO">ALUNO</option>
+        </select>
+
+        <button id="btn-create">Create</button>
+      </form>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+  </body>
+</html>

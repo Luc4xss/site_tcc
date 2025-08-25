@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+:root {
+  --light-blue: rgb(0, 132, 255);
+  --blue: rgb(0, 102, 255);
+  --gray-bg: #ebebee;
+  --white-bg: white;
+  --hover-bg: #d9d9e0;
+  --font-color: rgb(87, 87, 87);
+  --border: rgb(197, 197, 197);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(120deg, rgb(0, 110, 255), rgb(0, 153, 255));
+}
+
+.container {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  background-color: white;
+  padding: 1.4rem;
+  border-radius: 0.5rem;
+  box-shadow: 0rem 0.2rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.container h2 {
+  text-align: center;
+  color: rgb(150, 150, 150);
+  font-size: 2.4rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+form a {
+  text-align: end;
+}
+
+.input {
+  display: flex;
+  padding: 1rem;
+  border: 0.1rem solid rgb(150, 150, 150);
+  border-radius: 0.5rem;
+  width: 24rem;
+}
+
+#btn-showpassword {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#btn-showpassword i {
+  color: rgb(150, 150, 150);
+}
+
+.input input {
+  width: 100%;
+  border: none;
+  outline: none;
+  color: rgb(150, 150, 150);
+}
+
+form #btn-create {
+  padding: 0.5rem;
+  background: linear-gradient(120deg, rgb(0, 110, 255), rgb(0, 153, 255));
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  font-size: 1.8rem;
+}
+
+form a {
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: rgb(150, 150, 150);
+}
+
+form a:hover {
+  text-decoration: underline;
+}
+
+#position {
+  padding: 0.4rem;
+  outline: none;
+  border-radius: 0.4rem;
+  background-color: var(--white-bg);
+}
