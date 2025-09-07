@@ -109,6 +109,9 @@ html {
     justify-content: space-between;
     width: 100%;
     gap: 0.2rem;
+    background-color: var(--main-bg);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
   }
 
   /* CONTEÚDO PRINCIPAL DA PÁGINA */
@@ -116,9 +119,19 @@ html {
   .main-content {
     display: flex;
     flex-direction: column;
-    width: 70%;
+    align-items: center;
+    width: 100%;
     height: 100%;
     gap: 0.2rem;
+  }
+
+  .content-body {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    gap: 2rem;
+    height: 80%;
+    width: 100%;
   }
 
   .main-content form {
@@ -187,16 +200,16 @@ html {
 
   .main-content .question-picker-container .question-topic:hover {
     border-bottom: 0.3rem solid var(--blue);
-    font-size: 1.7rem;
   }
 
   .main-content .question-container {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    width: 100%;
-    height: 100%;
+    gap: 0.4rem;
+    width: 70%;
     overflow-y: auto;
+    border-radius: var(--border-radius);
+    padding: 1rem;
   }
 
   /* CAIXA DO COMENTARIO/PERGUNTA */
@@ -205,6 +218,9 @@ html {
     display: flex;
     width: 100%;
     min-height: 20rem;
+    background-color: var(--main-bg);
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
   }
 
   .question-container .comment-content {
@@ -270,20 +286,6 @@ html {
     font-weight: 600;
   }
 
-  .question-container .comment-content .answer-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--light-blue);
-    border: none;
-    border-radius: 0.8rem;
-    color: white;
-    padding: 0.4rem;
-    width: 10rem;
-    font-size: 1.3rem;
-    text-decoration: none;
-  }
-
   .question-container .comment-content .comment-footer {
     display: flex;
     align-items: center;
@@ -314,61 +316,58 @@ html {
     background-color: white;
   }
 
-  /* CONTEÚDO SECUNDÁRIO DA PÁGINA */
+  /* TABELA DE PONTUAÇÃO */
 
-  .sec-content {
+  .score-container {
+    display: flex;
+    gap: 0.4rem;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.6rem;
+    height: 100%;
+    width: 20%;
+    border-radius: 0.4rem;
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+    background-color: var(--main-bg);
+  }
+
+  .score-container .user-score-container {
     display: flex;
     flex-direction: column;
-    width: 30%;
-    height: 100%;
-    gap: 0.2rem;
+    width: 100%;
+    padding: 0.4rem;
+    gap: 0.4rem;
   }
 
-  .sec-content .btn-container {
+  .score-container .user-card {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: var(--sec-bg);
-    min-height: 8rem;
-    border-top-right-radius: 0.2rem;
+    justify-content: space-between;
+    width: 100%;
+    height: 3.2rem;
+    padding: 0.8rem;
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.6rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    background-color: var(--main-bg);
   }
 
-  .sec-content .sec-btn-container {
+  .score-container .user-card:hover {
+    height: 3.4rem;
+  }
+
+  .score-container .user-card .user-infos {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--sec-bg);
-    height: 100%;
-    border-top-right-radius: 0.2rem;
+    gap: 1rem;
   }
 
-  .sec-content .create-question-btn {
-    background-color: var(--blue);
-    padding: 1rem 5rem;
-    border: none;
-    border-radius: 0.3rem;
+  .score-container .user-card-icon {
+    width: 2rem;
+    border-radius: 50%;
   }
 
-  .sec-content .create-question-btn a {
-    text-decoration: none;
-    color: var(--font-color);
-    font-weight: 550;
-    font-size: 1.3rem;
-  }
-
-  .sec-content .comment-history-btn {
-    background-color: var(--blue);
-    padding: 1rem 5rem;
-    border: none;
-    border-radius: 0.3rem;
-  }
-
-  .sec-content .comment-history-btn a {
-    text-decoration: none;
-    color: var(--font-color);
-    font-weight: 550;
-    font-size: 1.3rem;
-  }
+  /* CONTEÚDO SECUNDÁRIO DA PÁGINA */
 
   .bottom-bar {
     display: none;
@@ -439,7 +438,7 @@ html {
     width: 5.4rem;
     height: 5.4rem;
     border-radius: 50%;
-    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
   }
 
   .bottom-bar .create-question-btn i {
@@ -462,10 +461,10 @@ html {
     background-color: var(--sec-bg);
     min-height: 6rem;
     width: 100%;
-    box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.1);
   }
 
-  .main-content header .search-input {
+  header .search-input {
     display: flex;
     justify-content: space-between;
     border: 0.1rem solid var(--border);
@@ -474,13 +473,13 @@ html {
     border-radius: 1.4rem;
   }
 
-  .main-content .search-input input {
+  .search-input input {
     border: none;
     outline: none;
     background: transparent;
   }
 
-  .main-content #search-btn {
+  #search-btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -603,11 +602,20 @@ html {
     text-align: center;
   }
 
+  /* ERROS E ANIMAÇÕES */
+
+  #no-found-error {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
   /* OCULTAR ELEMENTOS DESNECESSÁRIOS */
 
   .sec-content,
   .left-bar,
-  .question-picker-container {
+  .question-picker-container,
+  .score-container,
+  .score-container {
     display: none !important;
   }
 }

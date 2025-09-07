@@ -32,13 +32,21 @@ def home():
         print(session['username'])
         cursor = mysql.connection.cursor()
         cursor.execute("""
-        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao,
+        COUNT(cp.id) AS curtidas, u.nome_de_usuario
         FROM perguntas p
         JOIN usuarios u ON p.usuario_id = u.id
-        ORDER BY p.data_de_publicacao DESC
+        LEFT JOIN curtidas cp ON p.id = cp.comentario_id
+        GROUP BY p.id
+        ORDER BY p.data_de_publicacao DESC;
         """)
         perguntas = cursor.fetchall()
-        return render_template('home.html', perguntas=perguntas, username=username)
+        cursor.execute("""
+        SELECT nome_de_usuario, pontos
+        FROM usuarios
+        """)
+        usuarios = cursor.fetchall()
+        return render_template('home.html', perguntas=perguntas, usuarios=usuarios, username=username)
     else:
         return redirect(url_for('login'))
     
@@ -83,10 +91,10 @@ def login():
         senha = request.form.get('senha')
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (nome,))
-        user = cursor.fetchone()  # Busca o usuário no banco
-        cursor.close()  # Fecha a conexão com o banco
+        user = cursor.fetchone()  
+        cursor.close()  
 
-        if user and check_password_hash(user[3], senha):  # Verifica se encontrou o usuário e se a senha está correta
+        if user and check_password_hash(user[3], senha):  
             if user[5] == 'ADMINISTRADOR':
                 session['cargo'] = 'ADMINISTRADOR'
             elif user[5] == 'PROFESSOR':
@@ -97,7 +105,8 @@ def login():
                 session['cargo'] = 'ALUNO'
 
             session['username'] = nome
-            return redirect(url_for('home'))  # Página do usuário logado
+            session['user_id'] = user[0]
+            return redirect(url_for('home'))
             erro = False
         else:
             erro = True
@@ -182,6 +191,36 @@ def create_question():
 
     return redirect(url_for('home'))
 
+@app.route("/like/<int:comentario_id>", methods=["GET", "POST"])
+def like_comment(comentario_id):
+    user_id = session.get("user_id")
+    if not user_id:
+        return "Você precisa estar logado", 401
+
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("""
+        SELECT id FROM curtidas
+        WHERE usuario_id = %s AND comentario_id = %s
+    """, (user_id, comentario_id))
+    curtida = cursor.fetchone()
+
+    if curtida:
+        cursor.execute("""
+            DELETE FROM curtidas
+            WHERE usuario_id = %s AND comentario_id = %s
+        """, (user_id, comentario_id))
+    else:
+        cursor.execute("""
+            INSERT INTO curtidas (usuario_id, comentario_id)
+            VALUES (%s, %s)
+        """, (user_id, comentario_id))
+
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for("home"))
+
 @app.route('/comment/id=<int:pergunta_id>')
 def show_responses(pergunta_id):
     
@@ -261,6 +300,13 @@ def search():
 @app.route('/filter/subject')
 def filter_subject():
     materia = request.args.get('materia')
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("""
+        SELECT nome_de_usuario
+        FROM usuarios
+        """)
+    usuarios = cursor.fetchall()
 
     cursor = mysql.connection.cursor()
 
@@ -283,7 +329,7 @@ def filter_subject():
     perguntas = cursor.fetchall()
     cursor.close()
     
-    return render_template('home.html', perguntas=perguntas)
+    return render_template('home.html', perguntas=perguntas, usuarios=usuarios)
 
 
 @app.route('/control/panel')

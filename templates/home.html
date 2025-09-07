@@ -61,7 +61,7 @@
             <form action="{{url_for('search')}}" method="post">
 
               <div class="search-input">
-                <input name="search-input" type="text" value="{{pesquisa if pesquisa!= '' else ''}}" placeholder="O que você procura?" />
+                <input name="search-input" type="text" value="{{pesquisa if pesquisa != '' else ''}}" placeholder="O que você procura?" />
                 <button id="search-btn">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -80,8 +80,9 @@
             </ul>            
           </div>
 
-          </header>   
-
+          </header> 
+          
+          <div class="content-body">
             <div class="question-container">
               {% if perguntas %}
                 {% for pergunta in perguntas %}
@@ -91,7 +92,7 @@
                         <div class="comment-header">
                           <div>
                             <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
-                            <p class="question-username">@{{ pergunta[6] }}</p>
+                            <p class="question-username">@{{ pergunta[7] }}</p>
                             -
                             <p class="user-position">{{ pergunta[3] }}</p>
                           </div>
@@ -109,7 +110,7 @@
                             <h2 class="question-title">{{ pergunta[1] }}</h2>
                           </div>
                           <div class="question-body">
-                            <p>{{ pergunta[2] }}</p>
+                            <p id="comment-text">{{ pergunta[2] }}</p>
                           </div>
                         </div>
                       </div>
@@ -117,8 +118,9 @@
               
                       <div class="comment-footer">
                         <div>
-                          <a class="answer-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Responder</a>
                           <a class="show-responses-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver respostas</a>
+                          <a href="{{url_for('like_comment', comentario_id=pergunta[0])}}" class="like-comment-btn"><i class="fa-regular fa-heart"></i></a>
+                          </i><p>{{ pergunta[6] }}</p>
                         </div>
                         
                         <p>{{ pergunta[4] }}</p>
@@ -131,15 +133,28 @@
               {% endif %}
             </div>
             
-
+            <div class="score-container">
+              <h2>Tabela de pontuação</h2>
+              <div class="user-score-container">
+                {% for usuario in usuarios %}
+                  <div class="user-card">
+                    <div class="user-infos">
+                      1
+                      <img class="user-card-icon" src="/static/imgs/no_photo.png" alt="" />
+                      <p>@{{usuario[0]}}</p>
+                    </div>
+                    <div class="user-score">
+                      <p>{{usuario[1]}}</p>
+                    </div>
+                    
+                  </div>
+                {% endfor %}
+                
+              </div>
             </div>
-        <div class="sec-content">
-          <div class="btn-container">
-            <button class="create-question-btn"><a href="{{url_for('question_create_page')}}">Faça uma pergunta</a> </button>
           </div>
-          <div class="sec-btn-container">
-            <butto class="comment-history-btn" type="button"><a href="">Histórico de comentários</a></button>
-          </div>
+
+          
 
         </div>
 
@@ -149,5 +164,8 @@
     </div>
 
     <script src="/static/js/appearance.js"></script>
+    <script src="translate.js"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
   </body>
 </html>
