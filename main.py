@@ -6,6 +6,8 @@ from datetime import datetime
 import requests
 import json
 from flask_cors import CORS
+import pymysql
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 CORS(app)
