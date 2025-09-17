@@ -4,49 +4,95 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HOME</title>
+    <link rel="stylesheet" href="/static/css/register_style.css" />
     <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
 
-    <link rel="stylesheet" href="/static/css/register_style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <div class="container">
-      <h2>WELCOME</h2>
-
       <form id="register" action="/register" method="post">
-        <div class="input">
-          <input type="text" name="name" placeholder="name" />
+        <div class="login-container">
+          <h2>CRIAR CONTA</h2>
+
+          <div class="input-container">
+            <div class="input-box">
+              <label for="name">Nome</label>
+              <div class="input">
+                <input type="text" name="name" placeholder="Nome" />
+              </div>
+            </div>
+
+            <div class="input-box">
+              <label for="username">Nome de usuário</label>
+              <div class="input">
+                <input
+                  type="text"
+                  name="username"
+                  required
+                  placeholder="Nome de usuário"
+                />
+              </div>
+            </div>
+
+            <div class="input-box">
+              <label for="password">Senha</label>
+
+              <div class="input">
+                <input
+                  type="password"
+                  name="password"
+                  id="senha"
+                  required
+                  placeholder="••••••••••••"
+                />
+
+                <button type="button" id="btn-showpassword">
+                  <i class="fa-solid fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-box">
+              <label for="email">Email</label>
+
+              <div class="input">
+                <input
+                  type="text"
+                  name="email"
+                  id="senha"
+                  placeholder="exemplo@email.com"
+                />
+              </div>
+            </div>
+
+            <div class="input-box">
+              <label for="position">Cargo</label>
+              <select name="position" id="position">
+                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                <option value="PROFESSOR">PROFESSOR</option>
+                <option value="MONITOR">MONITOR</option>
+                <option value="ALUNO">ALUNO</option>
+              </select>
+            </div>
+
+            <button id="btn-login" type="submit">Criar</button>
+
+            <div class="login-container"></div>
+          </div>
         </div>
-
-        <div class="input">
-          <input type="text" name="username" placeholder="username" required />
-        </div>
-
-        <div class="input">
-          <input
-            type="password"
-            id="password_input"
-            name="password"
-            placeholder="••••••••••••"
-            required
-          />
-          <button type="button" id="btn-showpassword">
-            <i class="fa-solid fa-eye-slash"></i>
-          </button>
-        </div>
-
-        <div class="input">
-          <input type="email" name="email" placeholder="example@email.com" />
-        </div>
-
-        <select name="position" id="position">
-          <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-          <option value="PROFESSOR">PROFESSOR</option>
-          <option value="MONITOR">MONITOR</option>
-          <option value="ALUNO">ALUNO</option>
-        </select>
-
-        <button id="btn-create">Create</button>
       </form>
+      <img
+        class="left-container"
+        src="/static/imgs/Balão colorido no céu azul.png"
+        alt=""
+      />
     </div>
 
     <script src="/static/js/script.js"></script>

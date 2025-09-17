@@ -56,15 +56,11 @@ body {
   background: linear-gradient(120deg, var(--blue), var(--light-blue));
 }
 
-button {
-  cursor: pointer;
-}
-
 /* CONTAINER */
 
 .container {
   display: flex;
-  background-color: var(--sec-bg);
+  background-color: var(--main-bg);
   width: 90%;
   height: 92%;
   border-radius: 0.2rem;
@@ -144,16 +140,6 @@ i.hide {
   background-color: var(--hover-bg);
 }
 
-.content {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 0.2rem;
-  background-color: var(--main-bg);
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-}
-
 .container .notifications-bar {
   display: flex;
   background-color: var(--main-bg);
@@ -204,174 +190,63 @@ i.hide {
   font-size: var(--text-font-size);
 }
 
-/* PARTE DO CONTEÚDO */
+/* PARTE DA EDIÇÃO DO PERFIL */
 
-.content {
+.profile-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
+  height: 100%;
+}
+
+.profile-container .user-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 1.4rem;
+  border-radius: 1.4rem;
+  background-color: var(--sec-bg);
+  height: 80%;
+  width: 60%;
+}
+
+.user-container .user-infos {
+  display: flex;
+  align-items: center;
   gap: 1rem;
-  background-color: var(--main-bg);
 }
 
-.content .back-home-btn-box {
+.user-container .user-infos div {
   display: flex;
-  width: 100%;
-  height: 4rem;
+  flex-direction: column;
 }
 
-.content #back-home-btn {
-  position: relative;
-  display: flex;
-  left: 4.2rem;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background-color: transparent;
-  padding: 0.4rem;
+.user-container .user-infos p {
+  font-size: var(--text-font-size);
   font-weight: 600;
-  border-radius: 0.2rem;
-  width: 2rem;
-  height: 2rem;
-  transition: 0.3s all;
-  text-decoration: none;
-  text-align: center;
-  align-self: flex-start;
 }
 
-.content #back-home-btn:hover {
-  background-color: var(--sec-bg);
-  width: 4rem;
-  height: 4rem;
+.user-container .user-infos #point-text {
+  justify-self: flex-end !important;
+  text-align: end;
+  font-weight: 600;
 }
 
-.content .control-panel-container {
+.user-container .user-history-container {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.6rem;
-  border-radius: 1rem;
-  height: 90%;
-  width: 95%;
-  background-color: var(--sec-bg);
-}
-
-.content .control-panel-container .header-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.content .control-panel-container .header-container #add-user-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  padding: 0.4rem;
-  width: 12%;
-  background-color: var(--light-blue);
-  border: none;
-  border-radius: 0.2rem;
-  color: white;
-  font-weight: 500;
-  font-size: 1.2rem;
-}
-
-/* PARTE DA ESTILIZAÇÃO DE CADA CAIXA DE USUÁRIO */
-
-.content .users-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.content .user-container {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.content .user-container .id-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 1rem;
-  border-radius: 0.2rem;
-  width: 8rem;
-  height: 8.2rem;
+  border-radius: 1.4rem;
   background-color: var(--main-bg);
+  height: 100%;
 }
 
-.content .user-container .user-info-container {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 0.2rem;
-  align-items: center;
-  background-color: var(--main-bg);
-  width: 100%;
+.profile-container #user-photo {
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  border: 0.1rem solid var(--main-bg);
+  padding: 0.1rem;
 }
 
-.content .user-container .user-info-container div {
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-}
-
-.content .user-container .user-info-container div.select-container {
-  display: flex;
-  flex-direction: column;
-  width: 15%;
-}
-
-.content .user-container .user-info-container div input {
-  padding: 0.6rem;
-  background-color: var(--sec-bg);
-
-  border-radius: 0.8rem;
-  border: none;
-  width: 100%;
-  outline: none;
-}
-
-.content .user-container .user-info-container div select {
-  position: relative;
-  top: 0.6rem;
-  padding: 0.4rem;
-  outline: none;
-  border: none;
-  border-radius: 0.4rem;
-  background-color: var(--sec-bg);
-  width: 100%;
-}
-
-.content .user-container .user-info-container .button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.content .user-container .user-info-container .button-container button,
-#delete-user-btn {
-  padding: 0.4rem;
-  width: 100%;
-  background-color: var(--light-blue);
-  border: none;
-  border-radius: 0.8rem;
-  color: white;
-  font-weight: 500;
-  font-size: 1.4rem;
-}
-
-.content
-  .user-container
-  .user-info-container
-  .button-container
-  #delete-user-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}

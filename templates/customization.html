@@ -6,7 +6,7 @@
     <title>Configurações: Customização</title>
     <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
 
-    <link rel="stylesheet" href="/static/css/settings_style.css" />
+    <link rel="stylesheet" href="/static/css/customization_style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -36,7 +36,9 @@
                   </li>
                   <li class="option">
                     <i class="fa-solid fa-clock-rotate-left"></i
-                    ><a href="#">Minhas interações</a>
+                    ><a href="{{url_for('interactions_settings')}}"
+                      >Minhas interações</a
+                    >
                   </li>
                   <li class="option">
                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -83,8 +85,8 @@
               <div class="settings-option">
                 <h2>Tamanho da fonte</h2>
                 <select name="font-size-selector" id="font-size-selector">
-                  <option value="Pequeno">Pequeno</option>
-                  <option value="Médio">Médio (recomendado)</option>
+                  <option value="Pequena">Pequeno</option>
+                  <option value="Media">Médio (recomendado)</option>
                   <option value="Grande">Grande</option>
                 </select>
               </div>

@@ -6,11 +6,22 @@
   --light-blue: rgb(0, 132, 255);
   --blue: rgb(0, 102, 255);
   --main-bg: #ffffff;
-  --sec-bg: #ebebee;
+  --sec-bg: #ebf2f7;
   --hover-bg: #d9d9e0;
   --font-color: #575757;
   --border: rgb(197, 197, 197);
   --border-radius: 0.6rem;
+  --no-selected-option: #d4d8e2;
+  --title-font-size: ;
+  --text-font-size: 1.3rem;
+}
+
+:root.dark {
+  --main-bg: #1b1b1d;
+  --sec-bg: #27292c;
+  --hover-bg: #262629;
+  --font-color: #ffffff;
+  --border: #46474b;
 }
 
 * {
@@ -22,8 +33,19 @@
 }
 
 html {
-  font-size: 62.5%;
   scroll-behavior: smooth;
+}
+
+html.font-Pequena {
+  font-size: 52.5%;
+}
+
+html.font-Media {
+  font-size: 62.5%;
+}
+
+html.font-Grande {
+  font-size: 68.5%;
 }
 
 body {
@@ -153,15 +175,17 @@ button {
   padding: 0.4rem;
   font-weight: 600;
   border-radius: 0.2rem;
-  width: 4rem;
-  height: 4rem;
-  transition: 0.3s background-color;
+  width: 2rem;
+  height: 2rem;
+  transition: 0.3s all;
   text-decoration: none;
   text-align: center;
 }
 
 .content-header .page-header #back-home-btn:hover {
   background-color: var(--sec-bg);
+  width: 4rem;
+  height: 4rem;
 }
 
 /* MENU DE OPÇOES */

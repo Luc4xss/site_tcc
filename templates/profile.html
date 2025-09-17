@@ -6,7 +6,13 @@
     <title>Perfil</title>
     <link rel="stylesheet" href="/static/css/profile_style.css" />
     <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
-
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <div class="container">
@@ -16,20 +22,41 @@
         <nav class="nav-bar">
           <div class="main-options">
             <ul>
-              <li class="option"><a href="{{url_for('home')}}">Página Inicial</a></li>
-              <li class="option"><a href="">Fórum</a></li>
-              <li class="option"><a href="{{url_for('question_create_page')}}">Fazer uma Pergunta</a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}">Type IA</a></li>
+              <li class="option">
+                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
+              </li>
+              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
+              <li class="option"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
+              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
             </ul>
           </div>
           <div class="sec-options">
             <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}">Configurações</a></li>
-              <li class="option page"><a href="">Perfil</a></li>
+              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
+              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
+              <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
             </ul>
           </div>
         </nav>
       </div>
+      <div class="notifications-bar">
+        <div class="notifications-content">
+          <h2>Notificações</h2>
+          <div class="notifications-container">
+            {% if notificacoes %}
+              {% for notificacao in notificacoes %}
+                <div class="notification">
+                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
+                </div>
+              {% endfor %}
+            {% else %}
+                <p id="no-notification-text">Nenhuma notificação...</p>
+            {% endif %}
+          </div>
+          
+        </div>
+      </div>
+
 
       <div class="profile-container">
         <div class="profile-preview">
@@ -71,11 +98,11 @@
                         </div>
                         <div class="input-content">
                             <label for="password">Senha</label>
-                            <input type="password" placeholder="••••••••••••" value="{{user[3]}}" name="new_password">
+                            <input type="text" placeholder="••••••••••••" value="" name="new_password">
                         </div>
                         <div class="input-content">
                             <label for="confirm-password">Confirmar senha</label>
-                            <input type="password" placeholder="••••••••••••" name="confirm-password">
+                            <input type="text" placeholder="••••••••••••" name="confirm-password">
                         </div>
                         <div class="input-content">
                             <label for="email">Email</label>
@@ -90,8 +117,8 @@
                     </div>
 
                     <div class="btn-container">
-                        <button type="submit" id="btn-update">Atualizar informações</button>
-                        <button type="button" id="btn-switch"><a href="{{url_for('logout')}}">Sair</a></button>
+                        <a id="btn-update" href="{{url_for('update', id=user[0])}}">Atualizar informações</a>
+                        <a id="btn-switch" href="{{url_for('logout')}}">Sair</a>
                     </div>
                 </form>
 
@@ -105,5 +132,7 @@
     </div>
 
     <script src="/static/js/appearance.js"></script>
+    <script src="/static/js/interact.js"></script>
+
   </body>
 </html>

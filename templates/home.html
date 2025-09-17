@@ -24,25 +24,38 @@
           <div class="main-options">
             <ul>
               <li class="option page">
-                <a href="{{url_for('home')}}">Página Inicial</a>
+                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
               </li>
-              <li class="option"><a href="#">Fórum</a></li>
-              <li class="option"><a href="{{url_for('question_create_page')}}">Fazer uma Pergunta</a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}">Type IA</a></li>
+              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
+              <li class="option"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
+              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
             </ul>
           </div>
           <div class="sec-options">
             <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}">Configurações</a></li>
-              <li class="option">
-                <a
-                  href="{{url_for('profile', username=session.get('username'))}}"
-                  >Perfil</a
-                >
-              </li>
+              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
+              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
+              <li class="option"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
             </ul>
           </div>
         </nav>
+      </div>
+      <div class="notifications-bar">
+        <div class="notifications-content">
+          <h2>Notificações</h2>
+          <div class="notifications-container">
+            {% if notificacoes %}
+              {% for notificacao in notificacoes %}
+                <div class="notification">
+                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
+                </div>
+              {% endfor %}
+            {% else %}
+                <p id="no-notification-text">Nenhuma notificação...</p>
+            {% endif %}
+          </div>
+          
+        </div>
       </div>
 
       <div class="bottom-bar">
@@ -83,7 +96,7 @@
           </header> 
           
           <div class="content-body">
-            <div class="question-container">
+            <div class="comment-container">
               {% if perguntas %}
                 {% for pergunta in perguntas %}
                   <div class="comment">
@@ -94,11 +107,16 @@
                             <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
                             <p class="question-username">@{{ pergunta[7] }}</p>
                             -
-                            <p class="user-position">{{ pergunta[3] }}</p>
+                            <p class="user-position {% if pergunta[3] == 'ADMINISTRADOR' %}admin-tag
+                            {% elif pergunta[3] == 'PROFESSOR' %}teacher-tag
+                            {% elif pergunta[3] == 'MONITOR' %}monitor-tag
+                            {% else %}student-tag
+
+                            {% endif %}">{{ pergunta[3] }}</p>
                           </div>
                           <div>
                             <p>publicado em <b>{{ pergunta[5] }}</b></p>
-                            {% if session.get('username') == pergunta[6] %}
+                            {% if session.get('username') == pergunta[7] %}
                               <a id="delete-comment-btn" href="{{url_for('delete_comment', comentario_id=pergunta[0])}}"><i class="fa-solid fa-trash"></i></a>
                             {% endif %}
                           </div>
@@ -119,8 +137,10 @@
                       <div class="comment-footer">
                         <div>
                           <a class="show-responses-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver respostas</a>
-                          <a href="{{url_for('like_comment', comentario_id=pergunta[0])}}" class="like-comment-btn"><i class="fa-regular fa-heart"></i></a>
-                          </i><p>{{ pergunta[6] }}</p>
+                          <a href="#" class="like-comment-btn" data-id="{{ pergunta[0] }}">
+                            <i class="fa-regular fa-heart"></i>
+                          </a>
+                          <p class="likes-count">{{ pergunta[6] }}</p>
                         </div>
                         
                         <p>{{ pergunta[4] }}</p>
@@ -139,12 +159,12 @@
                 {% for usuario in usuarios %}
                   <div class="user-card">
                     <div class="user-infos">
-                      1
+                      {{ loop.index }}
                       <img class="user-card-icon" src="/static/imgs/no_photo.png" alt="" />
                       <p>@{{usuario[0]}}</p>
                     </div>
                     <div class="user-score">
-                      <p>{{usuario[1]}}</p>
+                      <p>{{usuario[1]}}pts</p>
                     </div>
                     
                   </div>
@@ -153,9 +173,6 @@
               </div>
             </div>
           </div>
-
-          
-
         </div>
 
       </div>
@@ -164,8 +181,8 @@
     </div>
 
     <script src="/static/js/appearance.js"></script>
-    <script src="translate.js"></script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="/static/js/interact.js"></script>
+
 
   </body>
 </html>

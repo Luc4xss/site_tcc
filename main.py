@@ -6,8 +6,7 @@ from datetime import datetime
 import requests
 import json
 from flask_cors import CORS
-import pymysql
-pymysql.install_as_MySQLdb()
+
 
 app = Flask(__name__)
 CORS(app)
@@ -43,47 +42,72 @@ def home():
         ORDER BY p.data_de_publicacao DESC;
         """)
         perguntas = cursor.fetchall()
+
         cursor.execute("""
         SELECT nome_de_usuario, pontos
         FROM usuarios
+        ORDER BY pontos DESC
         """)
         usuarios = cursor.fetchall()
-        return render_template('home.html', perguntas=perguntas, usuarios=usuarios, username=username)
+
+        cursor.execute("""
+        SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
+        FROM notificacoes n
+        JOIN usuarios u ON n.remetente_id = u.id
+        WHERE n.destinatario_id = %s
+        ORDER BY n.data_criacao DESC
+        """, (session.get('user_id'),))
+        notificacoes = cursor.fetchall()
+        cursor.close()
+        return render_template('home.html', perguntas=perguntas, usuarios=usuarios, username=username, notificacoes=notificacoes)
     else:
         return redirect(url_for('login'))
     
 @app.route('/question/add')
 def question_create_page():
-    return render_template('question_create.html')
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
+        FROM notificacoes n
+        JOIN usuarios u ON n.remetente_id = u.id
+        WHERE n.destinatario_id = %s
+        ORDER BY n.data_criacao DESC
+        """, (session.get('user_id'),))
+    notificacoes = cursor.fetchall()
+    return render_template('question_create.html', notificacoes = notificacoes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
-    if request.method == 'POST':
-        name = request.form.get('name')
-        username = request.form.get('username')
-        position = request.form.get('position')
-        password = request.form.get('password')
-        hash_password = generate_password_hash(password)
-        email = request.form.get('email')
+    if session.get('cargo') == "ADMINISTRADOR":
 
-        cursor = mysql.connection.cursor()
-        
-        cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (username,))
-        user = cursor.fetchone()
-        
-        if user:
-            return "Usuário já existe. Escolha outro nome."
-        elif email == '':
-            email = None
+        if request.method == 'POST':
+            name = request.form.get('name')
+            username = request.form.get('username')
+            position = request.form.get('position')
+            password = request.form.get('password')
+            hash_password = generate_password_hash(password)
+            email = request.form.get('email')
 
-            cursor.execute("INSERT INTO usuarios (nome, nome_de_usuario, cargo, senha, email) VALUES (%s, %s, %s, %s, %s)", (name, username, position, hash_password, email))
-            mysql.connection.commit()
-            cursor.close()
-            return redirect(url_for('login'))  
+            cursor = mysql.connection.cursor()
+            
+            cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (username,))
+            user = cursor.fetchone()
+            
+            if user:
+                return "Usuário já existe. Escolha outro nome."
+            elif email == '':
+                email = None
+
+                cursor.execute("INSERT INTO usuarios (nome, nome_de_usuario, cargo, senha, email) VALUES (%s, %s, %s, %s, %s)", (name, username, position, hash_password, email))
+                mysql.connection.commit()
+                cursor.close()
+                return redirect(url_for('home'))  
+            
         
-    
-    return render_template('register.html')
+        return render_template('register.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -122,6 +146,7 @@ def logout():
 
     return redirect(url_for('login'))
 
+
 @app.route('/@<username>')
 def profile(username):
     
@@ -129,17 +154,84 @@ def profile(username):
 
     cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (username,))
     user = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
+        FROM notificacoes n
+        JOIN usuarios u ON n.remetente_id = u.id
+        WHERE n.destinatario_id = %s
+        ORDER BY n.data_criacao DESC
+        """, (session.get('user_id'),))
+    notificacoes = cursor.fetchall()
     cursor.close()
 
     if user is None:
         return "Usuário não encontrado", 404
-        
-    return render_template('profile.html', user=user)
+    
+    if username == session.get('username'):
+        return render_template('profile.html', user=user, notificacoes = notificacoes)
+    else:
+        return render_template('user_page.html', user=user, notificacoes=notificacoes)
+
 
 @app.route("/settings/customization")
 def customization_settings():
 
-    return render_template("settings.html")
+    return render_template("customization.html")
+
+@app.route("/settings/interactions")
+def interactions_settings():
+    cursor = mysql.connection.cursor()
+    id = session.get('user_id')
+
+    cursor.execute("""
+    SELECT 
+    p.id, 
+    p.titulo, 
+    p.texto, 
+    p.cargo, 
+    p.materia, 
+    p.data_de_publicacao,
+    u.nome_de_usuario
+    FROM perguntas p
+    JOIN usuarios u ON p.usuario_id = u.id
+    WHERE p.usuario_id = %s
+    ORDER BY p.data_de_publicacao DESC;
+    """, (id,))
+
+    perguntas = cursor.fetchall()
+    cursor.execute("""
+    SELECT 
+    r.id, 
+    r.texto, 
+    r.cargo, 
+    r.data_postagem,
+    u.nome_de_usuario
+    FROM respostas r
+    JOIN usuarios u ON r.usuario_id = u.id
+    WHERE r.usuario_id = %s
+    ORDER BY r.data_postagem DESC;
+    """, (id,))
+    respostas = cursor.fetchall()
+
+    cursor.execute("""
+    SELECT 
+    c.id AS curtida_id,
+    c.comentario_id,
+    c.data_criacao,
+    cm.texto AS comentario,
+    dono.id AS dono_comentario_id,
+    dono.nome_de_usuario AS dono_comentario
+    FROM curtidas c
+    JOIN perguntas cm ON c.comentario_id = cm.id
+    JOIN usuarios dono ON cm.usuario_id = dono.id
+    WHERE c.usuario_id = %s
+    ORDER BY c.data_criacao DESC;
+    """, (id,))
+    curtidas = cursor.fetchall()
+    cursor.close()
+
+    return render_template("interactions.html", perguntas = perguntas, respostas = respostas, curtidas= curtidas)
 
 @app.route('/update-infos/<int:id>', methods = ['GET', 'POST'])
 def update(id):
@@ -193,35 +285,69 @@ def create_question():
 
     return redirect(url_for('home'))
 
-@app.route("/like/<int:comentario_id>", methods=["GET", "POST"])
+@app.route("/like/<int:comentario_id>", methods=["POST"])
 def like_comment(comentario_id):
     user_id = session.get("user_id")
     if not user_id:
-        return "Você precisa estar logado", 401
+        return {"status": "error", "message": "Você precisa estar logado"}, 401
 
     cursor = mysql.connection.cursor()
 
     cursor.execute("""
-        SELECT id FROM curtidas
-        WHERE usuario_id = %s AND comentario_id = %s
+    SELECT id FROM curtidas
+    WHERE usuario_id = %s AND comentario_id = %s
     """, (user_id, comentario_id))
     curtida = cursor.fetchone()
 
     if curtida:
         cursor.execute("""
-            DELETE FROM curtidas
-            WHERE usuario_id = %s AND comentario_id = %s
+        DELETE FROM curtidas
+        WHERE usuario_id = %s AND comentario_id = %s
         """, (user_id, comentario_id))
+        cursor.execute("""
+        SELECT usuario_id FROM perguntas
+        WHERE id = %s
+        """, (comentario_id,))
+        usuario_id = cursor.fetchone()
+
+        cursor.execute("""
+        UPDATE usuarios
+        SET pontos = pontos - 10
+        WHERE id = %s
+        """, (usuario_id[0],))
+        action = "unliked"
+        
     else:
         cursor.execute("""
-            INSERT INTO curtidas (usuario_id, comentario_id)
-            VALUES (%s, %s)
+        INSERT INTO curtidas (usuario_id, comentario_id)
+        VALUES (%s, %s)
         """, (user_id, comentario_id))
+
+        cursor.execute("""
+        SELECT usuario_id FROM perguntas
+        WHERE id = %s
+        """, (comentario_id,))
+        usuario_id = cursor.fetchone()
+
+        cursor.execute("""
+        UPDATE usuarios
+        SET pontos = pontos + 10
+        WHERE id = %s
+        """, (usuario_id[0],))
+        action = "liked"
+
+    cursor.execute("SELECT usuario_id FROM perguntas WHERE id = %s", (comentario_id,))
+    dono_comentario = cursor.fetchone()
+    if dono_comentario and dono_comentario[0] != user_id:
+        cursor.execute("""
+        INSERT INTO notificacoes (remetente_id, tipo, destinatario_id, comentario_id)
+        VALUES (%s, %s, %s, %s)
+        """, (user_id, "curtida", dono_comentario[0], comentario_id,))
 
     mysql.connection.commit()
     cursor.close()
 
-    return redirect(url_for("home"))
+    return {"status": "success", "action": action}
 
 @app.route('/comment/id=<int:pergunta_id>')
 def show_responses(pergunta_id):
@@ -240,33 +366,50 @@ def show_responses(pergunta_id):
     pergunta = cursor.fetchone()
 
     cursor.execute("""
-        SELECT r.id, r.texto, r.cargo, r.data_postagem, r.autor
-        FROM respostas r
-        WHERE r.pergunta_id = %s
-        ORDER BY r.data_postagem DESC
+    SELECT r.id, r.texto, r.cargo, r.data_postagem, r.usuario_id, u.nome_de_usuario
+    FROM respostas r
+    JOIN usuarios u ON r.usuario_id = u.id
+    WHERE r.pergunta_id = %s
+    ORDER BY r.data_postagem DESC
     """, (pergunta_id,))
 
-    respostas = cursor.fetchall()  # Pega todas as respostas
+    respostas = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
+        FROM notificacoes n
+        JOIN usuarios u ON n.remetente_id = u.id
+        WHERE n.destinatario_id = %s
+        ORDER BY n.data_criacao DESC
+        """, (session.get('user_id'),))
+    notificacoes = cursor.fetchall()
 
     cursor.close()
 
 
-    return render_template('comment_response.html', pergunta = pergunta, respostas=respostas)
+    return render_template('comment_response.html', pergunta = pergunta, respostas=respostas, notificacoes = notificacoes)
 
 @app.route('/answer/comment/id=<int:pergunta_id>', methods = ['GET', 'POST'])
 def post_answer(pergunta_id):
     print(f'id do comentario: {pergunta_id}')
     resposta = {
         "texto": request.form.get('comment-response'),
-        "autor":  session.get('username'),
+        "usuario_id": session.get('user_id'),
         "cargo": session.get('cargo')
     }
     
 
     cursor = mysql.connection.cursor()
-    cursor.execute('INSERT INTO respostas (texto, cargo, pergunta_id, autor) VALUES (%s, %s, %s, %s)',
-        (resposta['texto'], resposta['cargo'], pergunta_id, resposta['autor'])
+    cursor.execute('INSERT INTO respostas (texto, cargo, pergunta_id, usuario_id) VALUES (%s, %s, %s, %s)',
+        (resposta['texto'], resposta['cargo'], pergunta_id, resposta['usuario_id'])
     )
+
+    cursor.execute('SELECT usuario_id FROM perguntas WHERE id = %s', (pergunta_id,))
+    destinatario = cursor.fetchone()
+    if destinatario:
+        cursor.execute('INSERT INTO notificacoes (remetente_id, tipo, destinatario_id, comentario_id) VALUES (%s, %s, %s, %s)',
+            (session.get('user_id'), 'resposta', destinatario[0], pergunta_id, )
+        )
 
     mysql.connection.commit()
 
@@ -294,10 +437,19 @@ def search():
         WHERE p.texto LIKE %s
         ORDER BY p.data_de_publicacao DESC
     """, (f"%{pesquisa}%",))
-
     perguntas = cursor.fetchall()
 
-    return render_template('home.html', perguntas=perguntas, pesquisa=pesquisa)
+
+    cursor.execute("""
+        SELECT nome_de_usuario, pontos
+        FROM usuarios
+        """)
+    usuarios = cursor.fetchall()
+
+    cursor.close()
+
+
+    return render_template('home.html', perguntas=perguntas, pesquisa=pesquisa, usuarios=usuarios)
 
 @app.route('/filter/subject')
 def filter_subject():
@@ -340,8 +492,16 @@ def control_panel():
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM usuarios")
         usuarios = cursor.fetchall()
+        cursor.execute("""
+        SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
+        FROM notificacoes n
+        JOIN usuarios u ON n.remetente_id = u.id
+        WHERE n.destinatario_id = %s
+        ORDER BY n.data_criacao DESC
+        """, (session.get('user_id'),))
+        notificacoes = cursor.fetchall()
         cursor.close()
-        return render_template('control_panel.html', usuarios=usuarios)
+        return render_template('control_panel.html', usuarios=usuarios, notificacoes = notificacoes)
 
     else:
         return redirect(url_for('home'))
@@ -358,12 +518,23 @@ def update_user(id):
         'new_position': request.form.get('position')
     }
 
-    cursor.execute("""
-            UPDATE usuarios
-            SET nome = %s, nome_de_usuario = %s, senha = %s, email = %s, cargo = %s
-            WHERE id = %s
-            """, (new_user['new_name'], new_user['new_username'], new_user['new_password'], new_user['new_email'], new_user['new_position'], id))
+    if new_user['new_password'] == "":
+        cursor.execute("""
+        UPDATE usuarios
+        SET nome = %s, nome_de_usuario = %s, email = %s, cargo = %s
+        WHERE id = %s
+        """, (new_user['new_name'], new_user['new_username'], new_user['new_email'], new_user['new_position'], id))
+        
+    else:
+        hash_password = generate_password_hash(new_user['new_password'])
+        cursor.execute("""
+        UPDATE usuarios
+        SET nome = %s, nome_de_usuario = %s, senha = %s, email = %s, cargo = %s
+        WHERE id = %s
+        """, (new_user['new_name'], new_user['new_username'], hash_password, new_user['new_email'], new_user['new_position'], id))
+        
     mysql.connection.commit()
+    cursor.close()
 
     return redirect(url_for('control_panel'))
 

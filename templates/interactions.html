@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações: Customização</title>
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
+
+  <link rel="stylesheet" href="/static/css/interactions_style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="content-header">
+      <header class="page-header">
+        <a id="back-home-btn" href="{{ url_for('home') }}">
+          < </header>
+    </div>
+    <div class="content">
+      <div>
+        <div class="left-bar">
+          <h2 id="logo">SITE</h2>
+
+          <nav class="nav-bar">
+            <div class="main-options">
+              <ul>
+                <li class="option">
+                  <i class="fa-solid fa-palette"></i><a href="{{url_for('customization_settings')}}">Customização</a>
+                </li>
+                <li class="option page">
+                  <i class="fa-solid fa-clock-rotate-left"></i><a href="#">Minhas interações</a>
+                </li>
+                <li class="option">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <a href="#">Relatar um erro</a>
+                </li>
+              </ul>
+            </div>
+            <hr />
+            <div class="sec-options">
+              <ul>
+                <li class="option">
+                  <i class="fa-solid fa-rotate"></i>
+                  <a href="#">Redefinir configuraçoes</a>
+                </li>
+                <li class="option">
+                  <i class="fa-solid fa-brain"></i>
+                  <a href="#">Sobre o </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <div class="settings-container">
+        <div class="center-container">
+          <h2>Interações</h2>
+          <div class="options-container">
+            <div class="settings-option">
+              <h2>Interação</h2>
+              <select name="interaction-selector" id="interaction-selector">
+                <option value="comment">Comentários</option>
+                <option value="likes">Curtidas</option>
+              </select>
+            </div>
+
+            <div class="comment-container">
+              {% for pergunta in perguntas %}
+              <div class="comment">
+                <div class="comment-content">
+                  <div>
+                    <div class="comment-header">
+                      <div>
+                        <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
+                        <p class="question-username">@{{ pergunta[6] }}</p>
+                      </div>
+                      <div>
+                        <p>publicado em <b>{{ pergunta[5] }}</b></p>
+                        {% if session.get('username') == pergunta[6] %}
+                        <a id="delete-comment-btn" href="{{url_for('delete_comment', comentario_id=pergunta[0])}}"><i
+                            class="fa-solid fa-trash"></i></a>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="comment-body">
+                      <div class="question-title-container">
+                        <h2 class="question-title">{{ pergunta[1] }}</h2>
+                      </div>
+                      <div class="question-body">
+                        <p id="comment-text">{{ pergunta[2] }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="comment-footer">
+                    <div>
+                      <a class="show-responses-btn"
+                        href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver respostas</a>
+                    </div>
+
+                    <p>{{ pergunta[4] }}</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              <hr />
+              {% for resposta in respostas %}
+              <div class="answer">
+                <header class="answer-header">
+                  <div>
+                    <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
+
+                    <p>@{{ resposta[4] }}</p>
+                  </div>
+                  <p>publicado em <b>{{ resposta[3] }}</b></p>
+                </header>
+
+                <section class="answer-content">
+                  <p>{{ resposta[1] }}</p>
+                </section>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="likes-container">
+              {% for curtida in curtidas %}
+              <div class="like">
+                <p>Você curtiu o <a href="{{ url_for('show_responses', pergunta_id = curtida[1]) }}">comentário</a> de
+                  <a href="{{ url_for('profile', username=curtida[5]) }}">{{curtida[5]}}</a>
+                </p>
+                <p>{{curtida[2]}}</p>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/appearance.js"></script>
+  <script src="/static/js/interactions_settings.js"></script>
+</body>
+
+</html>
