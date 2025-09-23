@@ -260,7 +260,7 @@ button {
 
 /* PARTE DOS COMENTÁRIOS */
 
-.comment-container {
+.comments-container {
   display: flex;
   flex-direction: column !important;
   gap: 0.2rem;
@@ -273,23 +273,23 @@ button {
   background-color: var(--sec-bg);
 }
 
-.comment-container hr {
+.comments-container hr {
   margin: 0.4rem;
   color: var(--main-bg);
 }
 
-.comment-container .comment {
+.comments-container .comment {
   display: flex;
   width: 100%;
   min-height: 20rem;
   background-color: var(--main-bg) !important;
 }
 
-.dark .comment-container .comment {
+.dark .comments-container .comment {
   background-color: var(--sec-bg);
 }
 
-.comment-container .comment-content {
+.comments-container .comment-content {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -298,7 +298,7 @@ button {
   gap: 0.4rem;
 }
 
-.comment-container .comment-header {
+.comments-container .comment-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -307,7 +307,7 @@ button {
   gap: 1rem;
 }
 
-.comment-container .comment-header #delete-comment-btn {
+.comments-container .comment-header #delete-comment-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -321,17 +321,17 @@ button {
   text-decoration: none;
 }
 
-.comment-container .comment-header #delete-comment-btn:hover {
+.comments-container .comment-header #delete-comment-btn:hover {
   background-color: var(--sec-bg);
 }
 
-.comment-container .comment-header div {
+.comments-container .comment-header div {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.comment-container .comment-header .user-position {
+.comments-container .comment-header .user-position {
   color: white;
   padding: 0.4rem;
   font-weight: 600;
@@ -343,28 +343,28 @@ button {
   font-weight: 500;
 }
 
-.comment-container .question-user-icon {
+.comments-container .question-user-icon {
   width: 3rem;
   border-radius: 50%;
 }
 
-.comment-container .question-username {
+.comments-container .question-username {
   font-weight: 600;
 }
 
-.comment-container .comment-content .comment-footer {
+.comments-container .comment-content .comment-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.comment-container .comment-content .comment-footer div {
+.comments-container .comment-content .comment-footer div {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.comment-container .comment-content .comment-footer div .show-responses-btn {
+.comments-container .comment-content .comment-footer div .show-responses-btn {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -372,11 +372,11 @@ button {
   font-weight: 600;
 }
 
-.comment-container .comment-content .comment-footer p {
+.comments-container .comment-content .comment-footer p {
   text-align: center;
 }
 
-.comment-container #no-found-error {
+.comments-container #no-found-error {
   padding: 2rem;
   text-align: center;
   background-color: var(--main-bg);
@@ -384,7 +384,7 @@ button {
 
 /* PARTE DA CAIXA DE RESPOSTA DA PERGUNTA */
 
-.comment-container .answer {
+.comments-container .answer {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -394,26 +394,26 @@ button {
   border-bottom: 0.2rem solid var(--sec-bg);
 }
 
-.comment-container .answer .answer-header {
+.comments-container .answer .answer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.comment-container .answer .answer-header div {
+.comments-container .answer .answer-header div {
   display: flex;
   align-items: center;
   gap: 1rem;
   min-height: 4rem;
 }
 
-.comment-container .answer .answer-header .question-user-icon {
+.comments-container .answer .answer-header .question-user-icon {
   width: 2rem;
   border-radius: 50%;
 }
 
-.comment-container .answer .answer-content p {
+.comments-container .answer .answer-content p {
   font-size: var(--text-font-size);
 }
 

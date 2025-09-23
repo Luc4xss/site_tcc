@@ -15,8 +15,9 @@ const ia_answer = document.querySelector(".ia-response-container");
 
 script_text.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault(); // Impede quebra de linha
-    enviarMensagem(); // Sua função de envio
+    e.preventDefault();
+    enviarMensagem();
+
   }
 });
 
@@ -92,6 +93,12 @@ const enviarMensagem = async (e) => {
       document.querySelector(".spinner").classList.add("hide");
       send_button.querySelector("i").classList.remove("hide");
       send_button.querySelector("i").style.display = "block";
+      const scroll_area = document.querySelector(".scroll-area")
+      scroll_area.scrollTo({
+        top: scroll_area.scrollHeight,
+        behavior: "smooth"
+      });
+
     } catch (error) {
       clearInterval(interval);
       answer_box.querySelector(".ia-response-text").textContent =

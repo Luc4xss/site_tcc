@@ -1,109 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Faça uma pergunta</title>
-    <link rel="stylesheet" href="/static/css/create_question_style.css" />
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="left-bar">
-        <h2 id="logo">SITE</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faça uma pergunta</title>
+  <link rel="stylesheet" href="/static/css/create_question_style.css" />
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
 
-        <nav class="nav-bar">
-          <div class="main-options">
-            <ul>
-              <li class="option">
-                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
-              </li>
-              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
-              <li class="option page"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
-            </ul>
-          </div>
-          <div class="sec-options">
-            <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
-              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
-              <li class="option"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="notifications-bar">
-        <div class="notifications-content">
-          <h2>Notificações</h2>
-          <div class="notifications-container">
-            {% if notificacoes %}
-              {% for notificacao in notificacoes %}
-                <div class="notification">
-                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
-                </div>
-              {% endfor %}
-            {% else %}
-                <p id="no-notification-text">Nenhuma notificação...</p>
-            {% endif %}
-          </div>
-          
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="left-bar">
+      <h2 id="logo">SITE</h2>
+
+      <nav class="nav-bar">
+        <div class="main-options">
+          <ul>
+            <li class="option">
+              <a href="{{url_for('home')}}">
+                <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
+              </a>
+            </li>
+            <li class="option"><a href="#">
+                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
+              </a></li>
+            <li class="option page"><a href="{{url_for('question_create_page')}}">
+                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('ia_page')}}">
+                <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
+              </a></li>
+          </ul>
         </div>
-      </div>
-
-
-      <div class="bottom-bar">
-        <ul>
-          <li class="option"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i><p>Início</p></a></li>
-          <li class="option"><a href="#"><i class="fa-solid fa-diamond"></i> </i><p>IA</p></a></li>
-          <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i class="fa-solid fa-circle-plus "></i></a></li>
-          <li class="option"><a href=""><i class="fa-solid fa-user"></i> </i><p>Perfil</p></a></li>
-          <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-gear"></i> </i><p>Opções</p></a></li>
-        </ul>
-      </div>
-
-      <div class="content">
-        <div class="create-question-container">
-          <form action="{{url_for('create_question')}}" method="post">
-            <label for="question-title">Faça uma pergunta</label>
-            <input id="question-title" type="text" name="question-title" placeholder="Título da pergunta" required>
-            <textarea id="question-text" type="text" name="question-text" placeholder="Conteúdo da pergunta" required></textarea>
-            
-            <div class="input-container">
-              <select name="materia" id="subject-selector">
-                <option value="Curso Técnico">Curso Técnico</option>
-                <option value="Filosofia">Filosofia</option>
-                <option value="Física">Física</option>
-                <option value="Geografia">Geografia</option>
-                <option value="História">História</option>
-                <option value="Inglês">Inglês</option>
-                <option value="Matemática">Matemática</option>
-                <option value="Português">Português</option>
-                <option value="Química">Química</option>
-
-                
-              </select>
-
-              <button id="post-question-btn">Faça sua pergunta</button>
-            </div>
-
-          </form>
-          
+        <div class="sec-options">
+          <ul>
+            <li class="option"><a href="{{url_for('customization_settings')}}">
+                <p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i>
+              </a></li>
+            <li class="option"><a id="notification-btn" href="">
+                <p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('profile', username=session.get('username'))}}">
+                <p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i>
+              </a></li>
+          </ul>
         </div>
-      </div>
+      </nav>
+    </div>
+    <div class="notifications-bar">
+      <div class="notifications-content">
+        <h2>Notificações</h2>
+        <div class="notifications-container">
+          {% if notificacoes %}
+          {% for notificacao in notificacoes %}
+          <div class="notification">
+            <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}}
+              <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a>
+            </p>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p id="no-notification-text">Nenhuma notificação...</p>
+          {% endif %}
+        </div>
 
-        
       </div>
     </div>
 
-    <script src="/static/js/appearance.js"></script>
-    <script src="/static/js/interact.js"></script>
-  </body>
+
+    <div class="bottom-bar">
+      <ul>
+        <li class="option"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
+            <p>Início</p>
+          </a></li>
+        <li class="option"><a href="#"><i class="fa-solid fa-diamond"></i> </i>
+            <p>IA</p>
+          </a></li>
+        <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i
+              class="fa-solid fa-circle-plus "></i></a></li>
+        <li class="option"><a href=""><i class="fa-solid fa-user"></i> </i>
+            <p>Perfil</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-gear"></i> </i>
+            <p>Opções</p>
+          </a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="create-question-container">
+        <form action="{{url_for('create_question')}}" method="post" enctype="multipart/form-data">
+          <label for="question-title">Faça uma pergunta</label>
+          <input id="question-title" type="text" name="question-title" placeholder="Título da pergunta" required>
+          <textarea id="question-text" type="text" name="question-text" placeholder="Conteúdo da pergunta"
+            required></textarea>
+
+
+          <div class="input-container">
+            <input type="file" name="imagem" accept="image/*">
+
+            <select name="materia" id="subject-selector">
+              <option value="Curso Técnico">Curso Técnico</option>
+              <option value="Filosofia">Filosofia</option>
+              <option value="Física">Física</option>
+              <option value="Geografia">Geografia</option>
+              <option value="História">História</option>
+              <option value="Inglês">Inglês</option>
+              <option value="Matemática">Matemática</option>
+              <option value="Português">Português</option>
+              <option value="Química">Química</option>
+            </select>
+            <button id="post-question-btn">Faça sua pergunta</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+
+  <script src="/static/js/appearance.js"></script>
+  <script src="/static/js/interact.js"></script>
+</body>
+
 </html>

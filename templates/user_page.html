@@ -1,84 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil</title>
-    <link rel="stylesheet" href="/static/css/user_page_style.css" />
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="left-bar">
-        <h2 id="logo">SITE</h2>
 
-        <nav class="nav-bar">
-          <div class="main-options">
-            <ul>
-              <li class="option">
-                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
-              </li>
-              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
-              <li class="option"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
-            </ul>
-          </div>
-          <div class="sec-options">
-            <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
-              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
-              <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="notifications-bar">
-        <div class="notifications-content">
-          <h2>Notificações</h2>
-          <div class="notifications-container">
-            {% if notificacoes %}
-              {% for notificacao in notificacoes %}
-                <div class="notification">
-                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
-                </div>
-              {% endfor %}
-            {% else %}
-                <p id="no-notification-text">Nenhuma notificação...</p>
-            {% endif %}
-          </div>
-          
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil</title>
+  <link rel="stylesheet" href="/static/css/user_page_style.css" />
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="left-bar">
+      <h2 id="logo">SITE</h2>
+
+      <nav class="nav-bar">
+        <div class="main-options">
+          <ul>
+            <li class="option">
+              <a href="{{url_for('home')}}">
+                <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
+              </a>
+            </li>
+            <li class="option"><a href="#">
+                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('question_create_page')}}">
+                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('ia_page')}}">
+                <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
+              </a></li>
+          </ul>
         </div>
-      </div>
-
-
-      <div class="profile-container">
-        <div class="user-container">
-          <div class="user-infos">
-            <img src="/static/imgs/no_photo.png" alt="" id="user-photo">
-            <div>
-              <p>{{user[1]}}</p>
-              <p>@{{user[2]}}</p>
-            </div>
-            <p id="point-text">{{user[6]}}pts</p>
-          </div>
-          <div class="user-history-container">
-            <h2>Histórico de atividades</h2>
-          </div>
+        <div class="sec-options">
+          <ul>
+            <li class="option"><a href="{{url_for('customization_settings')}}">
+                <p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i>
+              </a></li>
+            <li class="option"><a id="notification-btn" href="">
+                <p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i>
+              </a></li>
+            <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}">
+                <p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i>
+              </a></li>
+          </ul>
         </div>
-        
+      </nav>
+    </div>
+    <div class="notifications-bar">
+      <div class="notifications-content">
+        <h2>Notificações</h2>
+        <div class="notifications-container">
+          {% if notificacoes %}
+          {% for notificacao in notificacoes %}
+          <div class="notification">
+            <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}}
+              <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a>
+            </p>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p id="no-notification-text">Nenhuma notificação...</p>
+          {% endif %}
+        </div>
+
       </div>
-    
     </div>
 
-    <script src="/static/js/appearance.js"></script>
-    <script src="/static/js/interact.js"></script>
 
-  </body>
+    <div class="profile-container">
+      <div class="user-container">
+        <div class="user-infos">
+          <img src="/static/imgs/no_photo.png" alt="" id="user-photo">
+          <div>
+            <p>{{user[1]}}</p>
+            <p>@{{user[2]}}</p>
+          </div>
+          <button id="share-profile-btn">Compartilhar perfil</button>
+          <p id="point-text">{{user[6]}} pontos</p>
+        </div>
+        <div class="user-history-container">
+          <div class="button-container">
+            <button id="comments-btn"><i class="fa-solid fa-comment"></i></button>
+            <button id="likes-btn"><i class="fa-regular fa-heart"></i></button>
+          </div>
+          <div class="comments-container">
+            {% for pergunta in perguntas %}
+            <div class="comment">
+              <div class="comment-content">
+                <div>
+                  <div class="comment-header">
+                    <div>
+                      <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
+                      <p class="question-username">@{{ pergunta[6] }}</p>
+                    </div>
+                    <div>
+                      <p>publicado em <b>{{ pergunta[5] }}</b></p>
+                      {% if session.get('username') == pergunta[6] %}
+                      <a id="delete-comment-btn" href="{{url_for('delete_comment', comentario_id=pergunta[0])}}"><i
+                          class="fa-solid fa-trash"></i></a>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="comment-body">
+                    <div class="question-title-container">
+                      <h2 class="question-title">{{ pergunta[1] }}</h2>
+                    </div>
+                    <div class="question-body">
+                      <p id="comment-text">{{ pergunta[2] }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comment-footer">
+                  <div>
+                    <a class="show-responses-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver
+                      respostas</a>
+                  </div>
+
+                  <p>{{ pergunta[4] }}</p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% for resposta in respostas %}
+            <div class="answer">
+              <header class="answer-header">
+                <div>
+                  <img class="question-user-icon" src="/static/imgs/no_photo.png" alt="" />
+
+                  <p>@{{ resposta[5] }}</p>
+                </div>
+                <p>publicado em <b>{{ resposta[4] }}</b></p>
+              </header>
+
+              <section class="answer-content">
+                <p>{{ resposta[1] }}</p>
+              </section>
+              <a class="show-responses-btn" href="{{url_for('show_responses', pergunta_id = resposta[3])}}">Ver mais</a>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="likes-container">
+            {% for curtida in curtidas %}
+            <div class="like">
+              <p>Curtiu o <a href="{{ url_for('show_responses', pergunta_id = curtida[1]) }}">comentário</a> de<a
+                  href="{{ url_for('profile', username=curtida[5]) }}">{{curtida[5]}}</a></p>
+              <p>{{curtida[2]}}</p>
+            </div>
+            {% endfor %}
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="/static/js/appearance.js"></script>
+  <script src="/static/js/interact.js"></script>
+  <script src="/static/js/interactions_settings.js"></script>
+
+</body>
+
 </html>

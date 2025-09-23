@@ -7,11 +7,27 @@ import requests
 import json
 from flask_cors import CORS
 
-
 app = Flask(__name__)
 CORS(app)
 
+import os
+from uuid import uuid4
+from werkzeug.utils import secure_filename
+
+UPLOAD_SUBFOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', UPLOAD_SUBFOLDER)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+def allowed_file(filename):
+    if not filename or '.' not in filename:
+        return False
+    ext = filename.rsplit('.', 1)[1].lower()
+    return ext in ALLOWED_EXTENSIONS
+
 # Configuração do banco de dados MySQL
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'  # Substitua pelo seu usuário do MySQL
 app.config['MYSQL_PASSWORD'] = 'LucasPlay123'  # Substitua pela sua senha do MySQL
@@ -33,7 +49,7 @@ def home():
         print(session['username'])
         cursor = mysql.connection.cursor()
         cursor.execute("""
-        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao,
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem,
         COUNT(cp.id) AS curtidas, u.nome_de_usuario
         FROM perguntas p
         JOIN usuarios u ON p.usuario_id = u.id
@@ -63,7 +79,7 @@ def home():
     else:
         return redirect(url_for('login'))
     
-@app.route('/question/add')
+@app.route('/question/create')
 def question_create_page():
     cursor = mysql.connection.cursor()
     cursor.execute("""
@@ -155,6 +171,56 @@ def profile(username):
     cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (username,))
     user = cursor.fetchone()
 
+    cursor.execute("SELECT id FROM usuarios WHERE nome_de_usuario = %s", (username,))
+    user_id = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT 
+    p.id, 
+    p.titulo, 
+    p.texto, 
+    p.cargo, 
+    p.materia, 
+    p.data_de_publicacao,
+    u.nome_de_usuario
+    FROM perguntas p
+    JOIN usuarios u ON p.usuario_id = u.id
+    WHERE p.usuario_id = %s
+    ORDER BY p.data_de_publicacao DESC;
+    """, (user_id,))
+    perguntas = cursor.fetchall()
+
+    cursor.execute("""
+    SELECT 
+    r.id, 
+    r.texto, 
+    r.cargo,
+    r.pergunta_id,
+    r.data_postagem,
+    u.nome_de_usuario
+    FROM respostas r
+    JOIN usuarios u ON r.usuario_id = u.id
+    WHERE r.usuario_id = %s
+    ORDER BY r.data_postagem DESC;
+    """, (user_id,))
+    respostas = cursor.fetchall()
+
+    cursor.execute("""
+    SELECT 
+    c.id AS curtida_id,
+    c.comentario_id,
+    c.data_criacao,
+    cm.texto AS comentario,
+    dono.id AS dono_comentario_id,
+    dono.nome_de_usuario AS dono_comentario
+    FROM curtidas c
+    JOIN perguntas cm ON c.comentario_id = cm.id
+    JOIN usuarios dono ON cm.usuario_id = dono.id
+    WHERE c.usuario_id = %s
+    ORDER BY c.data_criacao DESC;
+    """, (user_id,))
+    curtidas = cursor.fetchall()
+
     cursor.execute("""
         SELECT n.id, n.tipo, n.comentario_id, n.data_criacao, u.nome_de_usuario AS remetente
         FROM notificacoes n
@@ -171,7 +237,7 @@ def profile(username):
     if username == session.get('username'):
         return render_template('profile.html', user=user, notificacoes = notificacoes)
     else:
-        return render_template('user_page.html', user=user, notificacoes=notificacoes)
+        return render_template('user_page.html', user=user, notificacoes=notificacoes, perguntas = perguntas, respostas = respostas, curtidas = curtidas)
 
 
 @app.route("/settings/customization")
@@ -257,31 +323,53 @@ def update(id):
         
     return redirect(url_for('profile', username = session['username']))
 
-@app.route('/create-question', methods = ['GET', 'POST'])
+@app.route('/create/question', methods=['GET', 'POST'])
 def create_question():
-    if request.method == 'POST':
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM usuarios WHERE nome_de_usuario = %s", (session.get('username'),))
-        usuario = cursor.fetchone()
-        usuario_id = usuario[0]
+    if request.method != 'POST':
+        return redirect(url_for('home'))
 
-        pergunta = {
-            "titulo": request.form.get("question-title"),
-            "texto": request.form.get("question-text"),
-            "cargo": session.get('cargo'),
-            "materia": request.form.get("materia"),
-            "usuario_id": usuario_id,
-        }
+    cursor = mysql.connection.cursor()
 
-        cursor.execute(
-            "INSERT INTO perguntas (titulo, texto, cargo , materia, usuario_id) VALUES (%s, %s, %s, %s, %s)",
-            (pergunta['titulo'], pergunta['texto'], pergunta['cargo'], pergunta['materia'], pergunta['usuario_id'])
-        )
-        mysql.connection.commit()
+    cursor.execute("SELECT id FROM usuarios WHERE nome_de_usuario = %s", (session.get('username'),))
+    usuario = cursor.fetchone()
+    if not usuario:
         cursor.close()
+        return "Usuário não encontrado", 400
+    usuario_id = usuario[0]
 
+    imagem_path = None
+
+    print("FILES keys:", request.files.keys())
+
+    file = request.files.get('imagem')
+    if file and file.filename:
+        print("Arquivo recebido:", file.filename)
+        if allowed_file(file.filename):
+            filename = f"{uuid4().hex}_{secure_filename(file.filename)}"
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            try:
+                file.save(save_path)
+                imagem_path = f"{UPLOAD_SUBFOLDER}/{filename}"
+                print("Salvou arquivo em:", save_path)
+            except Exception as e:
+                print("Erro ao salvar arquivo:", e)
+        else:
+            print("Extensão não permitida:", file.filename)
     else:
-        pass
+        print("Nenhum arquivo enviado ou filename vazio")
+
+    titulo = request.form.get("question-title")
+    texto = request.form.get("question-text")
+    cargo = session.get('cargo')
+    materia = request.form.get("materia")
+
+    cursor.execute("""
+        INSERT INTO perguntas (titulo, texto, cargo, materia, imagem, usuario_id)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (titulo, texto, cargo, materia, imagem_path, usuario_id))
+
+    mysql.connection.commit()
+    cursor.close()
 
     return redirect(url_for('home'))
 
@@ -431,25 +519,30 @@ def search():
     pesquisa = request.form.get("search-input")
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
-        FROM perguntas p
-        JOIN usuarios u ON p.usuario_id = u.id
-        WHERE p.texto LIKE %s
-        ORDER BY p.data_de_publicacao DESC
-    """, (f"%{pesquisa}%",))
+    SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem,
+    COUNT(cp.id) AS curtidas, u.nome_de_usuario
+    FROM perguntas p
+    JOIN usuarios u ON p.usuario_id = u.id
+    LEFT JOIN curtidas cp ON p.id = cp.comentario_id
+    WHERE p.texto LIKE %s
+    GROUP BY p.id
+    ORDER BY p.data_de_publicacao DESC
+""", (f"%{pesquisa}%",))
     perguntas = cursor.fetchall()
 
 
     cursor.execute("""
-        SELECT nome_de_usuario, pontos
-        FROM usuarios
-        """)
+    SELECT nome_de_usuario, pontos
+    FROM usuarios
+    """)
     usuarios = cursor.fetchall()
 
     cursor.close()
 
-
-    return render_template('home.html', perguntas=perguntas, pesquisa=pesquisa, usuarios=usuarios)
+    if pesquisa:
+        return render_template('home.html', perguntas=perguntas, pesquisa=pesquisa, usuarios=usuarios)
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/filter/subject')
 def filter_subject():
@@ -457,27 +550,27 @@ def filter_subject():
     cursor = mysql.connection.cursor()
 
     cursor.execute("""
-        SELECT nome_de_usuario
-        FROM usuarios
-        """)
+    SELECT nome_de_usuario
+    FROM usuarios
+    """)
     usuarios = cursor.fetchall()
 
     cursor = mysql.connection.cursor()
 
     if materia and materia != 'todas':
         cursor.execute("""
-            SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
-            FROM perguntas p
-            JOIN usuarios u ON p.usuario_id = u.id
-            WHERE p.materia = %s
-            ORDER BY p.data_de_publicacao DESC
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
+        FROM perguntas p
+        JOIN usuarios u ON p.usuario_id = u.id
+        WHERE p.materia = %s
+        ORDER BY p.data_de_publicacao DESC
         """, (materia,))
     else:
         cursor.execute("""
-            SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
-            FROM perguntas p
-            JOIN usuarios u ON p.usuario_id = u.id
-            ORDER BY p.data_de_publicacao DESC
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
+        FROM perguntas p
+        JOIN usuarios u ON p.usuario_id = u.id
+        ORDER BY p.data_de_publicacao DESC
         """)
 
     perguntas = cursor.fetchall()

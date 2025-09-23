@@ -111,6 +111,7 @@ i.hide {
   align-items: center;
   list-style: none;
 }
+
 .container .nav-bar .option {
   padding: 1rem;
   transition: 0.3s all;
@@ -303,7 +304,7 @@ i.hide {
 
 .profile-infos .title h3 {
   position: relative;
-  top: 0.2rem;
+  top: 2.2rem;
   left: 1.8rem;
   border-bottom: 0.3rem solid rgb(0, 110, 255);
   width: 16rem;
