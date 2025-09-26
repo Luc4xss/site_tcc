@@ -41,7 +41,7 @@ const enviarMensagem = async (e) => {
   if (e) e.preventDefault();
 
   if (script_text.value) {
-    form_area.style.top = "82%";
+    form_area.style.top = "84%";
     title.classList.add("hide");
     scroll_area.classList.remove("hide");
 

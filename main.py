@@ -505,14 +505,16 @@ def post_answer(pergunta_id):
     
     return redirect(url_for('show_responses', pergunta_id = pergunta_id))
 
-@app.route('/delete/comment/id=<int:comentario_id>')
+@app.route('/delete/comment/<int:comentario_id>', methods=['POST'])
 def delete_comment(comentario_id):
     cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM notificacoes WHERE comentario_id = %s", (comentario_id,))
+    cursor.execute("DELETE FROM curtidas WHERE comentario_id = %s", (comentario_id,))
     cursor.execute("DELETE FROM perguntas WHERE id = %s", (comentario_id,))
     mysql.connection.commit()
     cursor.close()
+    return {"success": True}
 
-    return redirect(url_for("home"))
 
 @app.route('/search', methods = ['GET', 'POST'])
 def search():

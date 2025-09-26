@@ -14,6 +14,22 @@
 </head>
 
 <body>
+  <div class="pop-up-container">
+    <div class="delete-comment-pop-up">
+      <div class="text-container">
+        <h1><i class="fa-solid fa-circle-exclamation"></i> ATENÇÃO!</h1>
+        <h3>Deseja excluir o comentário?</h3>
+      </div>
+
+      <div class="btn-container">
+        <button id="confirm-delete-btn">Sim</button>
+        <button id="close-pop-up-btn">Cancelar</button>
+      </div>
+
+
+    </div>
+  </div>
+
   <div class="container">
     <div class="left-bar">
       <h2 id="logo">SITE</h2>
@@ -52,6 +68,7 @@
         </div>
       </nav>
     </div>
+
     <div class="notifications-bar">
       <div class="notifications-content">
         <h2>Notificações</h2>
@@ -78,15 +95,16 @@
         <li class="option page"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
             <p>Início</p>
           </a></li>
-        <li class="option"><a href="#"><i class="fa-solid fa-diamond"></i> </i>
+        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-diamond"></i> </i>
             <p>IA</p>
           </a></li>
         <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i
               class="fa-solid fa-circle-plus "></i></a></li>
-        <li class="option"><a href=""><i class="fa-solid fa-user"></i> </i>
+        <li class="option"><a href="{{url_for('profile', username = session.get('username'))}}"><i
+              class="fa-solid fa-user"></i> </i>
             <p>Perfil</p>
           </a></li>
-        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-gear"></i> </i>
+        <li class="option"><a href="{{url_for('customization_settings')}}"><i class="fa-solid fa-gear"></i> </i>
             <p>Opções</p>
           </a></li>
       </ul>
@@ -126,7 +144,7 @@
           <div class="comment-container">
             {% if perguntas %}
             {% for pergunta in perguntas %}
-            <div class="comment">
+            <div class="comment" id="comment-{{pergunta[0]}}">
               <div class="comment-content">
                 <div>
                   <div class="comment-header">
@@ -144,9 +162,9 @@
                     </div>
                     <div>
                       <p>publicado em <b>{{ pergunta[5] }}</b></p>
-                      {% if session.get('username') == pergunta[7] %}
-                      <a id="delete-comment-btn" href="{{url_for('delete_comment', comentario_id=pergunta[0])}}"><i
-                          class="fa-solid fa-trash"></i></a>
+                      {% if session.get('username') == pergunta[8] %}
+                      <button id="delete-comment-btn" onclick="openDeletePopUp('{{pergunta[0]}}')"><i
+                          class="fa-solid fa-trash"></i></button>
                       {% endif %}
                     </div>
 

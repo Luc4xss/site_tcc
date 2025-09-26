@@ -62,6 +62,71 @@ html.font-Grande {
   border-radius: 2rem;
 }
 
+.pop-up-container {
+  position: absolute;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  backdrop-filter: blur(.2rem);
+  z-index: 999;
+}
+
+.delete-comment-pop-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--main-bg);
+  padding: 1rem;
+  border-radius: 1.4rem;
+  height: 30%;
+  min-width: 20%;
+  box-shadow: .2rem .2rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.delete-comment-pop-up h3 {
+  font-weight: 500;
+}
+
+.delete-comment-pop-up .text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.delete-comment-pop-up .btn-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.delete-comment-pop-up div a,
+button {
+  background-color: var(--light-blue);
+  padding: .6rem;
+  border-radius: .6rem;
+  border: none;
+  color: var(--font-color);
+  width: 10rem;
+  font-size: 1.6rem;
+  color: white;
+
+}
+
+.delete-comment-pop-up div a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.delete-comment-pop-up div button:last-child {
+  background-color: red;
+}
+
 @media (min-width: 1280px) {
   body {
     display: flex;
@@ -967,10 +1032,13 @@ html.font-Grande {
     align-self: flex-end;
     justify-content: center;
     align-items: center;
-    height: 9%;
+    height: 10%;
     width: 100%;
     background-color: var(--main-bg);
     box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.3);
+    border-top-right-radius: 1.8rem !important;
+    border-top-left-radius: 1.8rem !important;
+
   }
 
   .bottom-bar ul {
@@ -999,22 +1067,19 @@ html.font-Grande {
 
   .bottom-bar .create-question-btn {
     position: relative;
+    bottom: .4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    bottom: 2rem;
-    background-color: white;
-    width: 5.4rem;
-    height: 5.4rem;
+    width: 4.4rem;
+    height: 4.4rem;
     border-radius: 50%;
-    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
   }
 
   .bottom-bar .create-question-btn i {
     border-radius: 50%;
-    color: var(--blue);
+    color: var(--no-selected-option);
     font-size: 5rem;
-    border: 0.2rem solid white;
   }
 
   /* PARTE DO CABEÇALHO */
@@ -1028,7 +1093,7 @@ html.font-Grande {
     align-items: center;
     justify-content: center;
     background-color: var(--main-bg);
-    min-height: 6rem;
+    height: 7rem;
     width: 100%;
     box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.1);
   }
@@ -1036,8 +1101,10 @@ html.font-Grande {
   header .search-input {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0.8rem 3rem;
     width: 100%;
+    height: 90%;
     border-radius: 3rem;
     background-color: var(--sec-bg);
   }
@@ -1052,6 +1119,7 @@ html.font-Grande {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    width: fit-content;
   }
 
   /* PARTE DOS COMENTÁRIOS */

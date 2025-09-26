@@ -67,3 +67,46 @@ notification_button.addEventListener("click", (e) => {
     open = true;
   }
 });
+
+
+// Botão de deletar comentários
+
+const delete_btn = document.querySelector("#delete-comment-btn")
+const close_pop_up_btn = document.querySelector("#close-pop-up-btn")
+const pop_up_container = document.querySelector(".pop-up-container")
+const confirm_delete_btn = document.querySelector("#confirm-delete-btn")
+
+let selectedCommentId = null
+
+function openDeletePopUp(id) {
+  selectedCommentId = id
+  pop_up_container.style.display = "flex"
+}
+
+if (close_pop_up_btn) {
+  close_pop_up_btn.addEventListener('click', () => {
+    pop_up_container.style.display = "none"
+    selectedCommentId = null
+  });
+}
+
+if (confirm_delete_btn) {
+  confirm_delete_btn.addEventListener('click', () => {
+    if (selectedCommentId) {
+      fetch(`/delete/comment/${selectedCommentId}`, {
+        method: "POST"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(`comment-${selectedCommentId}`).remove();
+            pop_up_container.style.display = "none"
+            selectedCommentId = null
+          } else {
+            alert("Erro ao excluir comentário!")
+          }
+        })
+        .catch(err => console.error(err))
+    }
+  });
+}

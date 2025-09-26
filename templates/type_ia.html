@@ -1,93 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Type IA</title>
-    <link rel="stylesheet" href="/static/css/type_ia_style.css" />
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="side-bar">
-        <nav class="nav-bar">
-          <ul>
-            <li id="li-1"><div class="text-hover">Voltar</div><a href="{{url_for('home')}}"><img class="icon" src="/static/imgs/Icon.png" alt=""></a></i></li>
-            <li id="li-2">
-              <div class="text-hover2">Novo chat</div>  
-              <a href="{{url_for('ia_page')}}"><i class="fa-solid fa-pen-to-square"></i></a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div class="content">
-        <div class="scroll-area hide">
-          <div class="messages-container">
-            <div class="user-question-container hide">
-              <p class="user-question-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed omnis unde veritatis aspernatur ducimus suscipit laboriosam atque aperiam eveniet corrupti, rerum ratione vero amet excepturi esse incidunt, voluptas in? Quae?</p>
-            </div>
-            <div class="ia-response-container hide">
-              <div class="ia-response-icon">
-                <img src="/static/imgs/Icon.png" alt="">
-              </div>
-              <div class="ia-response-content"><p class="ia-response-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam quam pariatur sit iusto deserunt quae, ad id optio quas exercitationem, vero magni nesciunt commodi impedit doloremque minus harum, expedita perferendis.</p></div>
-            </div>
-          
-          </div>
 
-        </div>
-        
-        
-        <div class="title">
-          <div>
-            <img class="icon" src="/static/imgs/Icon.png" alt=""><h2>Olá, {{session.get("username")}}.</h2>
-          </div>
-          
-          <h3>Como posso te ajudar hoje?</h3>
-        </div>
-        <div class="form-area">
-          <div class="text-container">
-            <textarea name="" id="script-text" placeholder="Seu código ou prompt"></textarea>
-            <div class="text-container-footer">
-              <div class="select-wrapper">
-                <select name="" id="prompt-selector">
-                  <option value="Olá, crie um código: ">Criação de código</option>
-                  <option value="Olá, corrija meu código: ">Correção de código</option>
-                  <option value="Olá, traduza meu código: ">Tradução de código</option>
-                  <option value="Olá, explique o código: ">Explicação de código</option>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Type IA</title>
+  <link rel="stylesheet" href="/static/css/type_ia_style.css" />
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
-                </select>
-                <select name="" id="language-selector">
-                  <option value=" em C++ sem me explicar nada sobre ele">C++</option>
-                  <option value=" em C# sem me explicar nada sobre ele">C#</option>
-                  <option value=" em JAVA sem me explicar nada sobre ele">JAVA</option>
-                  <option value=" em JAVA SCRIPT sem me explicar nada sobre ele">JAVA SCRIPT</option>
-                  <option value=" em PYTHON sem me explicar nada sobre ele">PYTHON</option>
-                </select>
-              </div>
-              
-              <button id="send-script-btn"><i class="fa-solid fa-chevron-right"></i> <div class="spinner hide"></div></button>
-              
-            </div>
-          </div>
-          
-        </div>
-
-        <h2 id="ia-footer-warn">Esta IA auxilia na programação, mas pode gerar erros. Revise e teste o código antes de usar.</h2>
-        
-      </div>
+<body>
+  <div class="container">
+    <div class="side-bar">
+      <nav class="nav-bar">
+        <ul>
+          <li id="li-1">
+            <div class="text-hover">Voltar</div><a href="{{url_for('home')}}"><img class="icon"
+                src="/static/imgs/Icon.png" alt=""></a></i>
+          </li>
+          <li id="li-2">
+            <div class="text-hover2">Novo chat</div>
+            <a href="{{url_for('ia_page')}}"><i class="fa-solid fa-pen-to-square"></i></a>
+          </li>
+        </ul>
+      </nav>
     </div>
+    <div class="content">
+      <div class="scroll-area hide">
+        <div class="messages-container">
+          <div class="user-question-container hide">
+            <p class="user-question-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed omnis unde
+              veritatis aspernatur ducimus suscipit laboriosam atque aperiam eveniet corrupti, rerum ratione vero amet
+              excepturi esse incidunt, voluptas in? Quae?</p>
+          </div>
+          <div class="ia-response-container hide">
+            <div class="ia-response-icon">
+              <img src="/static/imgs/Icon.png" alt="">
+            </div>
+            <div class="ia-response-content">
+              <p class="ia-response-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam quam
+                pariatur sit iusto deserunt quae, ad id optio quas exercitationem, vero magni nesciunt commodi impedit
+                doloremque minus harum, expedita perferendis.</p>
+            </div>
+          </div>
 
-    <script src="/static/js/ia_script.js"></script>
-    <script src="/static/js/appearance.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        </div>
 
-  </body>
+      </div>
+
+      <div class="title">
+        <div>
+          <img class="icon" src="/static/imgs/Icon.png" alt="">
+          <h2>Olá, {{session.get("username")}}.</h2>
+        </div>
+
+        <h3>Como posso te ajudar hoje?</h3>
+      </div>
+      <div class="form-area">
+        <div class="text-container">
+          <textarea name="" id="script-text" placeholder="Seu código ou prompt"></textarea>
+          <div class="text-container-footer">
+            <div class="select-wrapper">
+              <select name="" id="prompt-selector">
+                <option value="Olá, crie um código: ">Criação de código</option>
+                <option value="Olá, corrija meu código: ">Correção de código</option>
+                <option value="Olá, traduza meu código: ">Tradução de código</option>
+                <option value="Olá, explique o código: ">Explicação de código</option>
+
+              </select>
+              <select name="" id="language-selector">
+                <option value=" em C++ sem me explicar nada sobre ele">C++</option>
+                <option value=" em C# sem me explicar nada sobre ele">C#</option>
+                <option value=" em JAVA sem me explicar nada sobre ele">JAVA</option>
+                <option value=" em JAVA SCRIPT sem me explicar nada sobre ele">JAVA SCRIPT</option>
+                <option value=" em PYTHON sem me explicar nada sobre ele">PYTHON</option>
+              </select>
+            </div>
+
+            <button id="send-script-btn"><i class="fa-solid fa-chevron-right"></i>
+              <div class="spinner hide"></div>
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+      <h2 id="ia-footer-warn">Esta IA auxilia na programação, mas pode gerar erros. Revise e teste o código antes de
+        usar.</h2>
+
+    </div>
+  </div>
+
+  <script src="/static/js/ia_script.js"></script>
+  <script src="/static/js/appearance.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</body>
+
 </html>
