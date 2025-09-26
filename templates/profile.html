@@ -39,6 +39,7 @@
           </div>
         </nav>
       </div>
+
       <div class="notifications-bar">
         <div class="notifications-content">
           <h2>Notificações</h2>
@@ -57,6 +58,25 @@
         </div>
       </div>
 
+      <div class="bottom-bar">
+      <ul>
+        <li class="option"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
+            <p>Início</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-diamond"></i> </i>
+            <p>IA</p>
+          </a></li>
+        <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i
+              class="fa-solid fa-circle-plus "></i></a></li>
+        <li class="option page"><a href="{{url_for('profile', username = session.get('username'))}}"><i
+              class="fa-solid fa-user"></i> </i>
+            <p>Perfil</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('customization_settings')}}"><i class="fa-solid fa-gear"></i> </i>
+            <p>Opções</p>
+          </a></li>
+      </ul>
+    </div>
 
       <div class="profile-container">
         <div class="profile-preview">

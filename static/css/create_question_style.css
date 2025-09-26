@@ -291,6 +291,10 @@ html.font-Grande {
     height: 100vh !important;
   }
 
+  .content {
+    width: 100%;
+  }
+
   .bottom-bar {
     position: fixed;
     display: flex;

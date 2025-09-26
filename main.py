@@ -26,16 +26,14 @@ def allowed_file(filename):
     ext = filename.rsplit('.', 1)[1].lower()
     return ext in ALLOWED_EXTENSIONS
 
-# Configuração do banco de dados MySQL
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'  # Substitua pelo seu usuário do MySQL
-app.config['MYSQL_PASSWORD'] = 'LucasPlay123'  # Substitua pela sua senha do MySQL
-app.config['MYSQL_DB'] = 'meu_banco_tcc'  # Substitua pelo nome do seu banco de dados
+app.config['MYSQL_USER'] = 'root'  # usuário do MySQL
+app.config['MYSQL_PASSWORD'] = 'LucasPlay123'  # senha do MySQL
+app.config['MYSQL_DB'] = 'banco_do_tcc'  # nome do banco de dados
 app.secret_key = 'sua_chave_secreta_aqui'
 app.permanent_session_lifetime = timedelta(days=7)
 
-# Inicializando o MySQL
 mysql = MySQL(app)
 
 

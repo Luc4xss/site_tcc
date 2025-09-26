@@ -162,7 +162,7 @@
                     </div>
                     <div>
                       <p>publicado em <b>{{ pergunta[5] }}</b></p>
-                      {% if session.get('username') == pergunta[8] %}
+                      {% if session.get('username') == pergunta[8]%}
                       <button id="delete-comment-btn" onclick="openDeletePopUp('{{pergunta[0]}}')"><i
                           class="fa-solid fa-trash"></i></button>
                       {% endif %}

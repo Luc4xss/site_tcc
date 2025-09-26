@@ -110,3 +110,4 @@ if (confirm_delete_btn) {
     }
   });
 }
+

@@ -108,3 +108,22 @@ const enviarMensagem = async (e) => {
 };
 
 send_button.addEventListener("click", enviarMensagem);
+
+
+const close_left_bar_btn = document.querySelector("#close-left-bar-btn")
+const open_left_bar_btn = document.querySelector("#open-left-bar-btn")
+
+const left_bar = document.querySelector(".left-bar")
+close_left_bar_btn.addEventListener('click', () => {
+  left_bar.style.width = "10%"
+  let timeout = setTimeout(() => {
+    left_bar.style.display = "none"
+  }, 100)
+})
+
+open_left_bar_btn.addEventListener('click', () => {
+    left_bar.style.display = "flex"
+    let timeout = setTimeout(() => {
+      left_bar.style.width = "60%"
+    }, 10)
+})
