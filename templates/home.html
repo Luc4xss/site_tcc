@@ -126,15 +126,30 @@
 
           <div class="question-picker-container">
             <ul>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Curso Técnico')}}">Curso
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Curso Técnico')}}">Ensino
                   Técnico</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Física')}}">Física</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='História')}}">História</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Matemática')}}">Matemática</a>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Física')}}">Ensino Básico</a>
               </li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Português')}}">Português</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Química')}}">Química</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='todas')}}">...</a></li>
+              <li><a class="question-topic" href="{{url_for('home')}}">Geral</a>
+              </li>
+              <li><select name="" id="">
+                  <option value="" disabled selected>Selecione uma matéria</option>
+                  <option value="Artes">Artes</option>
+                  <option value="Biologia">Biologia</option>
+                  <option value="Ciências">Ciências</option>
+                  <option value="Educação Física">Educação Física</option>
+                  <option value="Ensino Religioso">Ensino Religioso</option>
+                  <option value="Filosofia">Filosofia</option>
+                  <option value="Física">Física</option>
+                  <option value="Geografia">Geografia</option>
+                  <option value="História">História</option>
+                  <option value="Inglês">Inglês</option>
+                  <option value="Matemática">Matemática</option>
+                  <option value="Português">Português</option>
+                  <option value="Química">Química</option>
+                  <option value="Redação">Redação</option>
+                  <option value="Sociologia">Sociologia</option>
+                </select></li>
             </ul>
           </div>
 

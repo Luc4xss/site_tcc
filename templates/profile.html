@@ -1,64 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil</title>
-    <link rel="stylesheet" href="/static/css/profile_style.css" />
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="left-bar">
-        <h2 id="logo">SITE</h2>
 
-        <nav class="nav-bar">
-          <div class="main-options">
-            <ul>
-              <li class="option">
-                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
-              </li>
-              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
-              <li class="option"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
-            </ul>
-          </div>
-          <div class="sec-options">
-            <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
-              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
-              <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil</title>
+  <link rel="stylesheet" href="/static/css/profile_style.css" />
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
-      <div class="notifications-bar">
-        <div class="notifications-content">
-          <h2>Notificações</h2>
-          <div class="notifications-container">
-            {% if notificacoes %}
-              {% for notificacao in notificacoes %}
-                <div class="notification">
-                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
-                </div>
-              {% endfor %}
-            {% else %}
-                <p id="no-notification-text">Nenhuma notificação...</p>
-            {% endif %}
-          </div>
-          
+<body>
+  <div class="container">
+    <div class="left-bar">
+      <h2 id="logo">SITE</h2>
+
+      <nav class="nav-bar">
+        <div class="main-options">
+          <ul>
+            <li class="option">
+              <a href="{{url_for('home')}}">
+                <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
+              </a>
+            </li>
+            <li class="option"><a href="#">
+                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('question_create_page')}}">
+                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('ia_page')}}">
+                <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
+              </a></li>
+          </ul>
         </div>
-      </div>
+        <div class="sec-options">
+          <ul>
+            <li class="option"><a href="{{url_for('customization_settings')}}">
+                <p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i>
+              </a></li>
+            <li class="option"><a id="notification-btn" href="">
+                <p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i>
+              </a></li>
+            <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}">
+                <p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i>
+              </a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
 
-      <div class="bottom-bar">
+    <div class="notifications-bar">
+      <div class="notifications-content">
+        <h2>Notificações</h2>
+        <div class="notifications-container">
+          {% if notificacoes %}
+          {% for notificacao in notificacoes %}
+          <div class="notification">
+            <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}}
+              <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a>
+            </p>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p id="no-notification-text">Nenhuma notificação...</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bottom-bar">
       <ul>
         <li class="option"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
             <p>Início</p>
@@ -78,81 +92,84 @@
       </ul>
     </div>
 
-      <div class="profile-container">
-        <div class="profile-preview">
-            <div class="basic-infos">
-                <h2>@{{user[2]}}</h2>
-                <h3>{{user[1]}}</h3>
-            </div>
-            <div class="photo-container">
-                <img id="user-photo" src="/static/imgs/no_photo.png" alt="user-photo">
-            <div class="warn-container">
-                <p>Carregue um novo avatar. Imagens grandes serão redimensionadas automaticamente.
-                   <br>Tamanho máximo para upload: <b>1MB</b></p>
-            </div>
-                </form>
+    <div class="profile-container">
+      <div class="profile-preview">
+        <div class="basic-infos">
+          <h2>@{{user[2]}}</h2>
+          <h3>{{user[1]}}</h3>
+        </div>
+        <div class="photo-container">
+          <img id="user-photo" src="/static/imgs/no_photo.png" alt="user-photo">
+          <div class="warn-container">
+            <p>Carregue um novo avatar. Imagens grandes serão redimensionadas automaticamente.
+              <br>Tamanho máximo para upload: <b>1MB</b>
+            </p>
+          </div>
+          </form>
 
-                <form action="" method="post">
-                    <button id="btn-delete" type="submit" onclick="return confirm('Tem certeza?')">Deletar conta</button>
-                </form>
-            </div>
-            
+          <form action="" method="post">
+            <button id="btn-delete" type="submit" onclick="return confirm('Tem certeza?')">Deletar conta</button>
+          </form>
         </div>
 
-        <div class="profile-infos">
-            <div class="title">
-                <h2>Editar perfil</h2>
-                <h3>Informações do usuário</h4>
-            </div>
-            <div class="infos">
-                <form action="{{url_for('update', id=user[0])}}" method="post">
-                    <div class="input-container">
-                        <div class="input-content">
-                            <label for="name">Nome</label>
-                            <input type="text" placeholder="name" value="{{user[1]}}" name="new_name">
-                        </div>
+      </div>
 
-                        <div class="input-content">
-                            <label for="username">Nome de usuário</label>
-                            <input type="text" placeholder="username" value="{{user[2]}}" name="new_username">
-                        </div>
-                        <div class="input-content">
-                            <label for="password">Senha</label>
-                            <input type="text" placeholder="••••••••••••" value="" name="new_password">
-                        </div>
-                        <div class="input-content">
-                            <label for="confirm-password">Confirmar senha</label>
-                            <input type="text" placeholder="••••••••••••" name="confirm-password">
-                        </div>
-                        <div class="input-content">
-                            <label for="email">Email</label>
-                            <input type="email" placeholder="example@email.com" value="{{ user[4] if user[4] else ''  }}" name="new_email">
-                        </div>
-                        <div class="input-content panel">
-                          {% if session.get('cargo') == 'ADMINISTRADOR' %}
-                            <a id="control-panel-btn" href="{{url_for('control_panel')}}">Painel de controle</a>
-                          {% endif %}
-                        </div>
-
-                    </div>
-
-                    <div class="btn-container">
-                        <a id="btn-update" href="{{url_for('update', id=user[0])}}">Atualizar informações</a>
-                        <a id="btn-switch" href="{{url_for('logout')}}">Sair</a>
-                    </div>
-                </form>
-
-                
-
-                
-            </div>
+      <div class="profile-infos">
+        <div class="title">
+          <h2>Editar perfil</h2>
+          <h3>Informações do usuário</h4>
         </div>
-    </div>
-    
+        <div class="infos">
+          <form action="{{url_for('update', id=user[0])}}" method="post">
+            <div class="input-container">
+              <div class="input-content">
+                <label for="name">Nome</label>
+                <input type="text" placeholder="name" value="{{user[1]}}" name="new_name">
+              </div>
+
+              <div class="input-content">
+                <label for="username">Nome de usuário</label>
+                <input type="text" placeholder="username" value="{{user[2]}}" name="new_username">
+              </div>
+              <div class="input-content">
+                <label for="password">Senha</label>
+                <input type="text" placeholder="••••••••••••" value="" name="new_password">
+              </div>
+              <div class="input-content">
+                <label for="confirm-password">Confirmar senha</label>
+                <input type="text" placeholder="••••••••••••" name="confirm-password">
+              </div>
+              <div class="input-content">
+                <label for="email">Email</label>
+                <input type="email" placeholder="example@email.com" value="{{ user[4] if user[4] else ''  }}"
+                  name="new_email">
+              </div>
+              <div class="input-content panel">
+                {% if session.get('cargo') == 'ADMINISTRADOR' %}
+                <a id="control-panel-btn" href="{{url_for('control_panel')}}">Painel de controle</a>
+                {% endif %}
+              </div>
+
+            </div>
+
+            <div class="btn-container">
+              <a id="btn-update" href="{{url_for('update', id=user[0])}}">Atualizar informações</a>
+              <a id="btn-switch" href="{{url_for('logout')}}">Sair</a>
+            </div>
+          </form>
+
+
+
+
+        </div>
+      </div>
     </div>
 
-    <script src="/static/js/appearance.js"></script>
-    <script src="/static/js/interact.js"></script>
+  </div>
 
-  </body>
+  <script src="/static/js/appearance.js"></script>
+  <script src="/static/js/interact.js"></script>
+
+</body>
+
 </html>

@@ -383,7 +383,8 @@ html.font-Grande {
     font-size: 1.2rem;
   }
 
-  .top-bar, .left-bar {
+  .top-bar,
+  .left-bar {
     display: none;
   }
 }
@@ -627,12 +628,9 @@ html.font-Grande {
   /* CAIXA DE RESPOSTA DA IA */
 
   .scroll-area {
-    position: relative;
-    bottom: 5rem;
     display: flex;
     align-items: center;
-    min-width: 100%;
-    max-width: 100% !important;
+    width: 100vw;
     height: 100%;
     flex-direction: column;
     padding: 7rem 1rem;
@@ -644,8 +642,7 @@ html.font-Grande {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    min-width: 100%;
-    max-width: 100%;
+    width: 95vw;
     align-items: center;
     justify-content: flex-start;
   }
@@ -664,6 +661,7 @@ html.font-Grande {
   .ia-response-content p {
     text-align: justify;
     font-size: 1.6rem;
+    max-width: 100%;
   }
 
   .ia-response-text {

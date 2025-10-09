@@ -1,101 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Configurações: Customização</title>
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
 
-    <link rel="stylesheet" href="/static/css/customization_style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="content-header">
-        <header class="page-header">
-          <a id="back-home-btn" href="{{ url_for('home') }}"><</a>
-        </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações: Customização</title>
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png" />
+
+  <link rel="stylesheet" href="/static/css/customization_style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="pop-up-container">
+    <div class="about-us-container">
+      <div class="text-container">
+        <h2>Sobre a plataforma</h2>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Hic ut cupiditate maxime voluptate quod officia,
+          itaque deserunt asperiores perferendis quasi iusto, aperiam fugiat consectetur dolorum laboriosam porro qui.
+          Nobis, ea.
+        </p>
       </div>
-      <div class="content">
-        <div>
-          <div class="left-bar">
-            <h2 id="logo">SITE</h2>
+      <div class="btn-container">
+        <button class="about-us-btn">Fechar</button>
+      </div>
 
-            <nav class="nav-bar">
-              <div class="main-options">
-                <ul>
-                  <li class="option page">
-                    <i class="fa-solid fa-palette"></i
-                    ><a href="">Customização</a>
-                  </li>
-                  <li class="option">
-                    <i class="fa-solid fa-clock-rotate-left"></i
-                    ><a href="{{url_for('interactions_settings')}}"
-                      >Minhas interações</a
-                    >
-                  </li>
-                  <li class="option">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <a href="#">Relatar um erro</a>
-                  </li>
-                </ul>
-              </div>
-              <hr />
-              <div class="sec-options">
-                <ul>
-                  <li class="option">
-                    <i class="fa-solid fa-rotate"></i>
-                    <a href="#">Redefinir configuraçoes</a>
-                  </li>
-                  <li class="option">
-                    <i class="fa-solid fa-brain"></i>
-                    <a href="#">Sobre o </a>
-                  </li>
-                </ul>
-              </div>
-            </nav>
-          </div>
+    </div>
+  </div>
+  <form action="{{url_for('send_message')}}" method="post">
+    <div class="message-container">
+      <div class="header">
+        <h2>Nova mensagem</h2>
+      </div>
+      <div class="input-container">
+        <textarea placeholder="Mensagem" name="message-text" id="" required></textarea>
+        <div class="btn-container">
+          <button>Enviar</button>
+          <button type="button" class="message-container-btn">Cancelar</button>
         </div>
-        <div class="settings-container">
-          <div>
-            <h2>Customização</h2>
-            <div class="options-container">
-              <div class="settings-option">
-                <h2>Modo</h2>
-                <select name="mode-selector" id="mode-selector">
-                  <option value="Claro">Claro</option>
-                  <option value="Escuro">Escuro</option>
-                </select>
-              </div>
 
-              <div class="settings-option">
-                <h2>Estilo do site</h2>
-                <select name="style-selector" id="style-selector">
-                  <option value="Tela cheia">Tela cheia</option>
-                  <option value="Minimizado">Minimizado</option>
-                </select>
-              </div>
+      </div>
+    </div>
+  </form>
 
-              <div class="settings-option">
-                <h2>Tamanho da fonte</h2>
-                <select name="font-size-selector" id="font-size-selector">
-                  <option value="Pequena">Pequeno</option>
-                  <option value="Media">Médio (recomendado)</option>
-                  <option value="Grande">Grande</option>
-                </select>
-              </div>
+  <div class=" container">
+    <div class="content-header">
+      <header class="page-header">
+        <a id="back-home-btn" href="{{ url_for('home') }}">
+          < </a>
+      </header>
+    </div>
+    <div class="content">
+      <div>
+        <div class="left-bar">
+          <h2 id="logo">SITE</h2>
+
+          <nav class="nav-bar">
+            <div class="main-options">
+              <ul>
+                <li class="option page">
+                  <i class="fa-solid fa-palette"></i><a href="">Customização</a>
+                </li>
+                <li class="option">
+                  <i class="fa-solid fa-clock-rotate-left"></i><a href="{{url_for('interactions_settings')}}">Minhas
+                    interações</a>
+                </li>
+                <li class="option">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <a class="message-container-btn">Relatar um erro</a>
+                </li>
+              </ul>
+            </div>
+            <hr />
+            <div class="sec-options">
+              <ul>
+                <li class="option">
+                  <i class="fa-solid fa-rotate"></i>
+                  <a onclick="resetAppearenceSettings()">Redefinir configuraçoes</a>
+                </li>
+                <li class="option">
+                  <i class="fa-solid fa-brain"></i>
+                  <a class="about-us-btn">Sobre a plataforma </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div class=" settings-container">
+        <div>
+          <h2>Customização</h2>
+          <div class="options-container">
+            <div class="settings-option">
+              <h2>Modo</h2>
+              <select name="mode-selector" id="mode-selector">
+                <option value="Claro">Claro</option>
+                <option value="Escuro">Escuro</option>
+              </select>
+            </div>
+
+            <div class="settings-option">
+              <h2>Estilo do site</h2>
+              <select name="style-selector" id="style-selector">
+                <option value="Tela cheia">Tela cheia</option>
+                <option value="Minimizado">Minimizado</option>
+              </select>
+            </div>
+
+            <div class="settings-option">
+              <h2>Tamanho da fonte</h2>
+              <select name="font-size-selector" id="font-size-selector">
+                <option value="Pequena">Pequeno</option>
+                <option value="Media">Médio (recomendado)</option>
+                <option value="Grande">Grande</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="/static/js/appearance.js"></script>
-  </body>
+  <script src="/static/js/interact.js"></script>
+  <script src="/static/js/appearance.js"></script>
+</body>
+
 </html>

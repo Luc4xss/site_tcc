@@ -14,6 +14,22 @@
 </head>
 
 <body>
+  <div class="pop-up-container">
+    <div class="about-us-container">
+      <div class="text-container">
+        <h2>Sobre a plataforma</h2>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Hic ut cupiditate maxime voluptate quod officia,
+          itaque deserunt asperiores perferendis quasi iusto, aperiam fugiat consectetur dolorum laboriosam porro qui.
+          Nobis, ea.
+        </p>
+      </div>
+      <div class="btn-container">
+        <button class="about-us-btn">Fechar</button>
+      </div>
+
+    </div>
+  </div>
+
   <div class="container">
     <div class="content-header">
       <header class="page-header">
@@ -32,7 +48,8 @@
                   <i class="fa-solid fa-palette"></i><a href="{{url_for('customization_settings')}}">Customização</a>
                 </li>
                 <li class="option page">
-                  <i class="fa-solid fa-clock-rotate-left"></i><a href="#">Minhas interações</a>
+                  <i class="fa-solid fa-clock-rotate-left"></i><a href="{{url_for('interactions_settings')}}">Minhas
+                    interações</a>
                 </li>
                 <li class="option">
                   <i class="fa-solid fa-triangle-exclamation"></i>
@@ -45,11 +62,11 @@
               <ul>
                 <li class="option">
                   <i class="fa-solid fa-rotate"></i>
-                  <a href="#">Redefinir configuraçoes</a>
+                  <a onclick="resetAppearenceSettings()">Redefinir configuraçoes</a>
                 </li>
                 <li class="option">
                   <i class="fa-solid fa-brain"></i>
-                  <a href="#">Sobre o </a>
+                  <a class="about-us-btn">Sobre a plataforma </a>
                 </li>
               </ul>
             </div>
@@ -145,6 +162,7 @@
   </div>
 
   <script src="/static/js/appearance.js"></script>
+  <script src="/static/js/interact.js"></script>
   <script src="/static/js/interactions_settings.js"></script>
 </body>
 

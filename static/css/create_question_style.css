@@ -307,6 +307,7 @@ html.font-Grande {
     box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.3);
     border-top-right-radius: 1.8rem !important;
     border-top-left-radius: 1.8rem !important;
+    bottom: 0rem;
     z-index: 999;
   }
 

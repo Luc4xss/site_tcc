@@ -36,18 +36,6 @@ html {
   scroll-behavior: smooth;
 }
 
-html.font-Pequena {
-  font-size: 52.5%;
-}
-
-html.font-Media {
-  font-size: 62.5%;
-}
-
-html.font-Grande {
-  font-size: 68.5%;
-}
-
 *::-webkit-scrollbar {
   width: 0.7rem;
   height: 0.2rem;
@@ -127,7 +115,19 @@ button {
   background-color: red;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1367px) {
+  html.font-Pequena {
+    font-size: 52.5%;
+  }
+
+  html.font-Media {
+    font-size: 62.5%;
+  }
+
+  html.font-Grande {
+    font-size: 68.5%;
+  }
+
   body {
     display: flex;
     align-items: center;
@@ -537,8 +537,8 @@ button {
     flex-direction: column;
     align-items: center;
     padding: 0.6rem;
-    height: 100%;
     min-width: 20%;
+    height: fit-content;
     border-radius: 0.4rem;
     box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
     background-color: var(--main-bg);
@@ -592,7 +592,19 @@ button {
   }
 }
 
-@media (min-width: 481px) and (max-width: 1279px) {
+@media (min-width: 481px) and (max-width: 1366px) {
+  html.font-Pequena {
+    font-size: 46.5%;
+  }
+
+  html.font-Media {
+    font-size: 56.5%;
+  }
+
+  html.font-Grande {
+    font-size: 66.5%;
+  }
+
   body {
     display: flex;
     align-items: center;
@@ -999,8 +1011,59 @@ button {
   /* TABELA DE PONTUAÇÃO */
 
   .score-container {
-    display: none;
+    display: flex;
+    gap: 0.4rem;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.6rem;
+    height: fit-content;
+    min-width: 25rem;
+    border-radius: 0.4rem;
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+    background-color: var(--main-bg);
+    margin-top: 1rem;
   }
+
+  .dark .score-container {
+    background-color: var(--sec-bg);
+  }
+
+  .score-container .user-score-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.4rem;
+    gap: 0.4rem;
+  }
+
+  .score-container .user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 3.2rem;
+    padding: 0.8rem;
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.6rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    background-color: var(--main-bg);
+  }
+
+  .score-container .user-card:hover {
+    height: 3.4rem;
+  }
+
+  .score-container .user-card .user-infos {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .score-container .user-card-icon {
+    width: 2rem;
+    border-radius: 50%;
+  }
+
 
   /* CONTEÚDO SECUNDÁRIO DA PÁGINA */
 
@@ -1012,6 +1075,18 @@ button {
 /* ESTILIZAÇÃO PARA MOBILE */
 
 @media (max-width: 480px) {
+  html.font-Pequena {
+    font-size: 52.5%;
+  }
+
+  html.font-Media {
+    font-size: 62.5%;
+  }
+
+  html.font-Grande {
+    font-size: 68.5%;
+  }
+
   .container {
     display: flex;
     width: 100vw !important;
@@ -1038,7 +1113,7 @@ button {
     box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.3);
     border-top-right-radius: 1.8rem !important;
     border-top-left-radius: 1.8rem !important;
-
+    bottom: 0rem;
   }
 
   .bottom-bar ul {
@@ -1083,6 +1158,11 @@ button {
   }
 
   /* PARTE DO CABEÇALHO */
+
+  .main-content {
+    width: 100vw !important;
+    height: 100vh;
+  }
 
   .main-content header {
     position: fixed;

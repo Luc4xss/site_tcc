@@ -85,5 +85,18 @@ if (font_selector) {
   });
 }
 
+// RESETAR CONFIGURAÇÕES
+
+function resetAppearenceSettings() {
+  localStorage.setItem("user-font", "Media")
+  atualizarFonte();
+
+  localStorage.setItem("user-style", "Tela cheia");
+  atualizarEstilo();
+
+  localStorage.setItem("user-mode", "Claro");
+  atualizarModo();
+}
+
 //  --main-bg: rgb(27, 27, 29);
 //  --sec-bg: rgb(39, 41, 44);

@@ -30,7 +30,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'  # usuário do MySQL
 app.config['MYSQL_PASSWORD'] = 'LucasPlay123'  # senha do MySQL
-app.config['MYSQL_DB'] = 'banco_do_tcc'  # nome do banco de dados
+app.config['MYSQL_DB'] = 'meu_banco_tcc'  # nome do banco de dados
 app.secret_key = 'sua_chave_secreta_aqui'
 app.permanent_session_lifetime = timedelta(days=7)
 
@@ -644,6 +644,34 @@ def delete_user(id):
 def ia_page():
     user = session.get("ursername")
     return render_template('type_ia.html')
+
+@app.route('/send/message', methods=['POST', 'GET'])
+def send_message():
+    message = {
+        'id': session.get('user_id'),
+        'mensagem': request.form.get('message-text')
+    }
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("INSERT INTO mensagem (remetente_id, mensagem) VALUES (%s, %s)", (message['id'], message['mensagem'],))
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for('home'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 API_KEY = "AIzaSyDEvmkzQAj6Us0uy5auYjtm1laJDCLYPg8"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
