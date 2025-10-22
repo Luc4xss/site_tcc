@@ -48,13 +48,19 @@ def home():
         cursor = mysql.connection.cursor()
         cursor.execute("""
         SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem,
-        COUNT(cp.id) AS curtidas, u.nome_de_usuario
+            COUNT(cp.id) AS curtidas,
+            u.nome_de_usuario,
+            IF(EXISTS(
+                SELECT 1
+                FROM curtidas c
+                WHERE c.comentario_id = p.id AND c.usuario_id = %s
+            ), 1, 0) AS usuario_curtiu
         FROM perguntas p
         JOIN usuarios u ON p.usuario_id = u.id
         LEFT JOIN curtidas cp ON p.id = cp.comentario_id
         GROUP BY p.id
         ORDER BY p.data_de_publicacao DESC;
-        """)
+        """, (session.get('user_id'),))
         perguntas = cursor.fetchall()
 
         cursor.execute("""
@@ -73,7 +79,7 @@ def home():
         """, (session.get('user_id'),))
         notificacoes = cursor.fetchall()
         cursor.close()
-        return render_template('home.html', perguntas=perguntas, usuarios=usuarios, username=username, notificacoes=notificacoes)
+        return render_template('index.html', perguntas=perguntas, usuarios=usuarios, username=username, notificacoes=notificacoes)
     else:
         return redirect(url_for('login'))
     
@@ -293,29 +299,51 @@ def interactions_settings():
     ORDER BY c.data_criacao DESC;
     """, (id,))
     curtidas = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT m.id, m.assunto, m.mensagem, m.data_criacao, m.stats, u.nome_de_usuario
+        FROM mensagem m
+        JOIN usuarios u ON m.remetente_id = u.id
+        WHERE m.remetente_id = %s
+        ORDER BY m.data_criacao DESC
+        """, (session.get('user_id'),))
+    mensagens = cursor.fetchall()
     cursor.close()
 
-    return render_template("interactions.html", perguntas = perguntas, respostas = respostas, curtidas= curtidas)
+    return render_template("interactions.html", perguntas = perguntas, respostas = respostas, curtidas= curtidas, mensagens=mensagens)
 
-@app.route('/update-infos/<int:id>', methods = ['GET', 'POST'])
+@app.route('/update/infos/<int:id>', methods = ['GET', 'POST'])
 def update(id):
     if request.method == 'POST':
         new_user = {
             'new_name': request.form.get('new_name'),
             'new_username': request.form.get('new_username'),
-            'new_password': request.form.get('new_password'), 
+            'new_password': request.form.get('new_password'),
             'new_email': request.form.get('new_email')
         }
+
+        print(new_user)
 
         cursor = mysql.connection.cursor()
         session['username'] = new_user['new_username']
 
-        cursor.execute("""
+        # Monta a query base
+        query = """
             UPDATE usuarios
-            SET nome = %s, nome_de_usuario = %s, senha = %s, email = %s
-            WHERE id = %s
-            """, (new_user['new_name'], new_user['new_username'], new_user['new_password'], new_user['new_email'], id))
-        
+            SET nome = %s, nome_de_usuario = %s, email = %s
+        """
+        values = [new_user['new_name'], new_user['new_username'], new_user['new_email']]
+
+        # Só atualiza a senha se o usuário digitou algo
+        if new_user['new_password'] and new_user['new_password'].strip():
+            query += ", senha = %s"
+            values.append(generate_password_hash(new_user['new_password']))
+
+        # Finaliza com o WHERE
+        query += " WHERE id = %s"
+        values.append(id)
+
+        cursor.execute(query, tuple(values))
         mysql.connection.commit()
         cursor.close()
         
@@ -540,11 +568,11 @@ def search():
     cursor.close()
 
     if pesquisa:
-        return render_template('home.html', perguntas=perguntas, pesquisa=pesquisa, usuarios=usuarios)
+        return render_template('index.html', perguntas=perguntas, pesquisa=pesquisa, usuarios=usuarios)
     else:
         return redirect(url_for('home'))
 
-@app.route('/filter/subject')
+@app.route('/filter/subject', methods = ['POST', 'GET'])
 def filter_subject():
     materia = request.args.get('materia')
     cursor = mysql.connection.cursor()
@@ -557,26 +585,44 @@ def filter_subject():
 
     cursor = mysql.connection.cursor()
 
-    if materia and materia != 'todas':
+    if materia and materia != 'Básico':
         cursor.execute("""
-        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem, COUNT(cp.id) AS curtidas, u.nome_de_usuario, 
+        IF(EXISTS(
+            SELECT 1
+            FROM curtidas c
+            WHERE c.comentario_id = p.id AND c.usuario_id = %s
+        ), 1, 0) AS usuario_curtiu
         FROM perguntas p
         JOIN usuarios u ON p.usuario_id = u.id
+        LEFT JOIN curtidas cp ON p.id = cp.comentario_id
         WHERE p.materia = %s
+        GROUP BY p.id
         ORDER BY p.data_de_publicacao DESC
-        """, (materia,))
+        """, (session.get('user_id'), materia,))
+        
+    
     else:
         cursor.execute("""
-        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, u.nome_de_usuario
+        SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem,
+            COUNT(cp.id) AS curtidas, u.nome_de_usuario,
+            IF(EXISTS(
+                SELECT 1
+                FROM curtidas c
+                WHERE c.comentario_id = p.id AND c.usuario_id = %s
+            ), 1, 0) AS usuario_curtiu
         FROM perguntas p
         JOIN usuarios u ON p.usuario_id = u.id
+        LEFT JOIN curtidas cp ON p.id = cp.comentario_id
+        WHERE LOWER(p.materia) != 'curso técnico'
+        GROUP BY p.id
         ORDER BY p.data_de_publicacao DESC
-        """)
+        """, (session['user_id'],))
 
     perguntas = cursor.fetchall()
     cursor.close()
     
-    return render_template('home.html', perguntas=perguntas, usuarios=usuarios)
+    return render_template('index.html', perguntas=perguntas, usuarios=usuarios)
 
 
 @app.route('/control/panel')
@@ -593,11 +639,32 @@ def control_panel():
         ORDER BY n.data_criacao DESC
         """, (session.get('user_id'),))
         notificacoes = cursor.fetchall()
+
+        cursor.execute("""
+        SELECT m.id, m.assunto, m.mensagem, m.data_criacao, m.stats, u.nome_de_usuario
+        FROM mensagem m
+        JOIN usuarios u ON m.remetente_id = u.id
+        ORDER BY m.data_criacao DESC
+        """)
+        mensagens = cursor.fetchall()
         cursor.close()
-        return render_template('control_panel.html', usuarios=usuarios, notificacoes = notificacoes)
+        return render_template('control_panel.html', usuarios=usuarios, mensagens = mensagens, notificacoes = notificacoes)
 
     else:
         return redirect(url_for('home'))
+    
+@app.route("/atualizar/status/<int:mensagemId>", methods = ['GET', 'POST'])
+def atualizar_mensagem(mensagemId):
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+    UPDATE mensagem
+    SET stats = 'visualizada'
+    WHERE id = %s
+    """, (mensagemId, ))
+    mysql.connection.commit()
+    cursor.close()
+
+    return jsonify({"status": "ok"})
 
 
 @app.route('/update/user/id=<int:id>', methods = ['GET', 'POST'])
@@ -640,24 +707,29 @@ def delete_user(id):
 
     return redirect(url_for('control_panel'))
 
+
+
 @app.route('/ia')
 def ia_page():
     user = session.get("ursername")
     return render_template('type_ia.html')
 
+
+
 @app.route('/send/message', methods=['POST', 'GET'])
 def send_message():
     message = {
         'id': session.get('user_id'),
+        'assunto': request.form.get('subject'),
         'mensagem': request.form.get('message-text')
     }
 
     cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO mensagem (remetente_id, mensagem) VALUES (%s, %s)", (message['id'], message['mensagem'],))
+    cursor.execute("INSERT INTO mensagem (remetente_id, assunto, mensagem) VALUES (%s, %s, %s)", (message['id'], message['assunto'], message['mensagem'],))
     mysql.connection.commit()
     cursor.close()
 
-    return redirect(url_for('home'))
+    return redirect(request.referrer)
 
 
 

@@ -1,80 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HOME</title>
-    <link rel="stylesheet" href="/static/css/control_panel_style.css" />
-    <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="left-bar">
-        <h2 id="logo">SITE</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOME</title>
+  <link rel="stylesheet" href="/static/css/control_panel_style.css" />
+  <link rel="icon" type="image/png" href="/static/imgs/Icon.png">
 
-        <nav class="nav-bar">
-          <div class="main-options">
-            <ul>
-              <li class="option">
-                <a href="{{url_for('home')}}"><p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i></a>
-              </li>
-              <li class="option"><a href="#"><p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i></a></li>
-              <li class="option"><a href="{{url_for('question_create_page')}}"><p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i></a></li>
-              <li class="option"><a href="{{url_for('ia_page')}}"><p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i></a></li>
-            </ul>
-          </div>
-          <div class="sec-options">
-            <ul>
-              <li class="option"><a href="{{url_for('customization_settings')}}"><p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i></a></li>
-              <li class="option"><a id="notification-btn" href=""><p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i></a></li>
-              <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}"><p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i></a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="notifications-bar">
-        <div class="notifications-content">
-          <h2>Notificações</h2>
-          <div class="notifications-container">
-            {% if notificacoes %}
-              {% for notificacao in notificacoes %}
-                <div class="notification">
-                  <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}} <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a> </p> 
-                </div>
-              {% endfor %}
-            {% else %}
-                <p id="no-notification-text">Nenhuma notificação...</p>
-            {% endif %}
-          </div>
-          
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="left-bar">
+      <h2 id="logo">SITE</h2>
+
+      <nav class="nav-bar">
+        <div class="main-options">
+          <ul>
+            <li class="option">
+              <a href="{{url_for('home')}}">
+                <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
+              </a>
+            </li>
+            <li class="option"><a href="#">
+                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('question_create_page')}}">
+                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+              </a></li>
+            <li class="option"><a href="{{url_for('ia_page')}}">
+                <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
+              </a></li>
+          </ul>
         </div>
+        <div class="sec-options">
+          <ul>
+            <li class="option"><a href="{{url_for('customization_settings')}}">
+                <p class="link-text">Configurações</p><i class="fa-solid fa-gear hide"></i>
+              </a></li>
+            <li class="option"><a id="notification-btn" href="">
+                <p class="link-text">Notificações</p><i class="fa-solid fa-bell hide"></i>
+              </a></li>
+            <li class="option page"><a href="{{url_for('profile', username=session.get('username'))}}">
+                <p class="link-text">Perfil</p><i class="fa-solid fa-user hide"></i>
+              </a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="notifications-bar">
+      <div class="notifications-content">
+        <h2>Notificações</h2>
+        <div class="notifications-container">
+          {% if notificacoes %}
+          {% for notificacao in notificacoes %}
+          <div class="notification">
+            <p><a href="#">{{notificacao[4]}}</a> {{"curtiu seu " if notificacao[1] == 'curtida' else "respondeu seu "}}
+              <a href="{{ url_for('show_responses', pergunta_id = notificacao[2]) }}">comentário.</a>
+            </p>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p id="no-notification-text">Nenhuma notificação...</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="content">
+      <div class="back-home-btn-box">
+        <a id="back-home-btn" href="{{ url_for('profile', username=session.get('username')) }}">
+          < </a>
       </div>
 
-
-      <div class="content">
-        <div class="back-home-btn-box">
-          <a id="back-home-btn" href="{{ url_for('profile', username=session.get('username')) }}"><</a>
+      <div class="content-container">
+        <div class="side-bar">
+          <ul>
+            <li class="message-tab-btn"><i class="fa-solid fa-message"></i>
+              <p>Mensagens</p>
+            </li>
+            <li class="user-tab-btn"><i class="fa-regular fa-user"></i>
+              <p>Usuários</p>
+            </li>
+          </ul>
         </div>
-        
 
         <div class="control-panel-container">
           <div class="header-container">
-            <h2>Painel de controle</h2>
             <a id="add-user-btn" href="{{url_for('register')}}">Adicionar usuário</a>
           </div>
-          <div class="users-container">
-            {% for usuario in usuarios %}
-              <form action="{{url_for('update_user', id=usuario[0])}}", method="post">
 
-              <div class="user-container">
+          <div class="inbox-container">
+            {% if mensagens %}
+            {% for mensagem in mensagens %}
+            <div class=" message-container {% if mensagem[4] == 'visualizada' %} seen-message {% endif %}">
+              <div class="text-container">
+                <div>
+                  <a href="{{url_for('profile', username = mensagem[5])}}">{{mensagem[5]}}</a>
+                  <p class="text"><b>{{mensagem[1]}}</b> - {{mensagem[2]}}</p>
+                </div>
+                <p class="date">Enviado em <b>{{mensagem[3]}}</b></p>
+              </div>
+              <div class="btn-container">
+                <input type="checkbox" {% if mensagem[4]=='visualizada' %} checked disabled {% endif %}
+                  data-id="{{mensagem[0]}}">
+                <label>Marcar como lida</label>
+
+              </div>
+
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <h2>Nenhuma mensagem...</h2>
+            {% endif %}
+
+          </div>
+
+          <div class=" user-container">
+            {% for usuario in usuarios %}
+            <form action=" {{url_for('update_user', id=usuario[0])}}" , method="post">
+              <div class="user-box">
                 <div class="id-container">
                   <p>ID</p>
                   <p><b>{{usuario[0]}}</b></p>
@@ -94,37 +146,36 @@
                   </div>
                   <div>
                     <label for="">Email</label>
-                    <input type="text" value="{{usuario[4] if usuario[4] else ''}}" name="name" placeholder="exemplo@email.com">
+                    <input type="text" value="{{usuario[4] if usuario[4] else ''}}" name="name"
+                      placeholder="exemplo@email.com">
                   </div>
                   <div class="select-container">
-                    <select name="position" >
-                      <option value="ADMINISTRADOR" {% if usuario[5] == "ADMINISTRADOR" %}selected{% endif %}>ADMINISTRADOR</option>
-                      <option value="PROFESSOR" {% if usuario[5] == "PROFESSOR" %}selected{% endif %}>PROFESSOR</option>
-                      <option value="MONITOR" {% if usuario[5] == "MONITOR" %}selected{% endif %}>MONITOR</option>
-                      <option value="ALUNO" {% if usuario[5] == "ALUNO" %}selected{% endif %}>ALUNO</option>
+                    <select name="position">
+                      <option value="ADMINISTRADOR" {% if usuario[5]=="ADMINISTRADOR" %}selected{% endif %}>
+                        ADMINISTRADOR
+                      </option>
+                      <option value="PROFESSOR" {% if usuario[5]=="PROFESSOR" %}selected{% endif %}>PROFESSOR
+                      </option>
+                      <option value="MONITOR" {% if usuario[5]=="MONITOR" %}selected{% endif %}>MONITOR</option>
+                      <option value="ALUNO" {% if usuario[5]=="ALUNO" %}selected{% endif %}>ALUNO</option>
                     </select>
                   </div>
                   <div class="button-container">
                     <a id="delete-user-btn" href="{{url_for('delete_user', id=usuario[0])}}">Deletar</a>
                     <button>Salvar</button>
                   </div>
-                  
+
                 </div>
               </div>
-              </form>
-
-            {% endfor %}  
+            </form>
+            {% endfor %}
           </div>
-          
-        </div>
-      </div>
 
-        
-      </div>
-    </div>
 
-    <script src="/static/js/appearance.js"></script>
-    <script src="/static/js/interact.js"></script>
 
-  </body>
+          <script src="/static/js/appearance.js"></script>
+          <script src="/static/js/interact.js"></script>
+
+</body>
+
 </html>

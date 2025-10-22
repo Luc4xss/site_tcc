@@ -215,8 +215,8 @@ html.font-Grande {
     width: 100%;
     gap: 1rem;
     background-color: var(--main-bg);
-    border-top-right-radius: 0.8rem;
-    border-bottom-right-radius: 0.8rem;
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
   }
 
   .content .create-question-container {
@@ -262,7 +262,8 @@ html.font-Grande {
     max-width: 24%;
   }
 
-  .content .input-container #subject-selector {
+  .content .input-container #subject-selector,
+  #type-selector {
     padding: 0.4rem;
     outline: none;
     border: none;
@@ -289,10 +290,12 @@ html.font-Grande {
     display: flex;
     width: 100vw !important;
     height: 100vh !important;
+    background-color: var(--main-bg);
   }
 
   .content {
     width: 100%;
+    background-color: var(--main-bg);
   }
 
   .bottom-bar {
@@ -405,7 +408,8 @@ html.font-Grande {
     max-width: 100%;
   }
 
-  .content .input-container #subject-selector {
+  .content .input-container #subject-selector,
+  #type-selector {
     padding: 0.4rem;
     outline: none;
     border: none;

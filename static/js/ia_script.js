@@ -87,8 +87,7 @@ const enviarMensagem = async (e) => {
       clearInterval(interval);
 
       const respostaMarkdown = data.resposta || data.erro;
-      answer_box.querySelector(".ia-response-text").innerHTML =
-        marked.parse(respostaMarkdown);
+      answer_box.querySelector(".ia-response-text").innerHTML = marked.parse(respostaMarkdown);
 
       document.querySelector(".spinner").classList.add("hide");
       send_button.querySelector("i").classList.remove("hide");
@@ -98,6 +97,27 @@ const enviarMensagem = async (e) => {
         top: scroll_area.scrollHeight,
         behavior: "smooth"
       });
+      answer_box.querySelector(".copy-text-btn").style.display = "flex"
+      answer_box.querySelector(".copy-text-btn").addEventListener("click", (e) => {
+        console.log('oi')
+        pre = answer_box.querySelector("pre code")
+        console.log(pre)
+        const text_to_copy = pre.innerText;
+        let copy_pop_up = document.querySelector(".copy-pop-up")
+
+        navigator.clipboard.writeText(text_to_copy)
+          .then(() => {
+            copy_pop_up.style.display = "flex"
+            let timeout1 = setTimeout(() => {
+              copy_pop_up.classList.add("show")
+            }, 10)
+
+            let timeout2 = setTimeout(() => {
+              copy_pop_up.classList.remove("show")
+            }, 3000)
+          })
+      })
+
 
     } catch (error) {
       clearInterval(interval);
@@ -122,8 +142,8 @@ close_left_bar_btn.addEventListener('click', () => {
 })
 
 open_left_bar_btn.addEventListener('click', () => {
-    left_bar.style.display = "flex"
-    let timeout = setTimeout(() => {
-      left_bar.style.width = "60%"
-    }, 10)
+  left_bar.style.display = "flex"
+  let timeout = setTimeout(() => {
+    left_bar.style.width = "70%"
+  }, 10)
 })

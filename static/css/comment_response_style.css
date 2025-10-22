@@ -468,6 +468,8 @@ html.font-Grande {
 
   .content {
     width: 100%;
+    background-color: var(--main-bg);
+
   }
 
   .main-content .page-header {

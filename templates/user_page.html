@@ -13,6 +13,12 @@
 </head>
 
 <body>
+
+  <div class="copy-pop-up">
+    <i class="fa-regular fa-copy"></i>
+    <h3>URL do perfil copiada</h3>
+  </div>
+
   <div class="container">
     <div class="left-bar">
       <h2 id="logo">SITE</h2>
@@ -25,11 +31,9 @@
                 <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
               </a>
             </li>
-            <li class="option"><a href="#">
-                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
-              </a></li>
+
             <li class="option"><a href="{{url_for('question_create_page')}}">
-                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+                <p class="link-text">Faça uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
               </a></li>
             <li class="option"><a href="{{url_for('ia_page')}}">
                 <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
@@ -51,6 +55,7 @@
         </div>
       </nav>
     </div>
+
     <div class="notifications-bar">
       <div class="notifications-content">
         <h2>Notificações</h2>
@@ -69,6 +74,26 @@
         </div>
 
       </div>
+    </div>
+
+    <div class="bottom-bar">
+      <ul>
+        <li class="option page"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
+            <p>Início</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-diamond"></i> </i>
+            <p>IA</p>
+          </a></li>
+        <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i
+              class="fa-solid fa-circle-plus "></i></a></li>
+        <li class="option"><a href="{{url_for('profile', username = session.get('username'))}}"><i
+              class="fa-solid fa-user"></i> </i>
+            <p>Perfil</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('customization_settings')}}"><i class="fa-solid fa-gear"></i> </i>
+            <p>Opções</p>
+          </a></li>
+      </ul>
     </div>
 
 
@@ -149,7 +174,7 @@
           <div class="likes-container">
             {% for curtida in curtidas %}
             <div class="like">
-              <p>Curtiu o <a href="{{ url_for('show_responses', pergunta_id = curtida[1]) }}">comentário</a> de<a
+              <p>Curtiu o <a href="{{ url_for('show_responses', pergunta_id = curtida[1]) }}">comentário</a> de <a
                   href="{{ url_for('profile', username=curtida[5]) }}">{{curtida[5]}}</a></p>
               <p>{{curtida[2]}}</p>
             </div>
@@ -161,7 +186,6 @@
       </div>
 
     </div>
-
   </div>
 
   <script src="/static/js/appearance.js"></script>

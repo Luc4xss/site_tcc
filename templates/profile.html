@@ -25,11 +25,9 @@
                 <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
               </a>
             </li>
-            <li class="option"><a href="#">
-                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
-              </a></li>
+
             <li class="option"><a href="{{url_for('question_create_page')}}">
-                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+                <p class="link-text">Faça uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
               </a></li>
             <li class="option"><a href="{{url_for('ia_page')}}">
                 <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
@@ -101,15 +99,8 @@
         <div class="photo-container">
           <img id="user-photo" src="/static/imgs/no_photo.png" alt="user-photo">
           <div class="warn-container">
-            <p>Carregue um novo avatar. Imagens grandes serão redimensionadas automaticamente.
-              <br>Tamanho máximo para upload: <b>1MB</b>
-            </p>
+            <p>Imagens de avatar não estão disponíveis</p>
           </div>
-          </form>
-
-          <form action="" method="post">
-            <button id="btn-delete" type="submit" onclick="return confirm('Tem certeza?')">Deletar conta</button>
-          </form>
         </div>
 
       </div>
@@ -120,7 +111,7 @@
           <h3>Informações do usuário</h4>
         </div>
         <div class="infos">
-          <form action="{{url_for('update', id=user[0])}}" method="post">
+          <form action="{{url_for('update', id=session.get('user_id'))}}" method="post">
             <div class="input-container">
               <div class="input-content">
                 <label for="name">Nome</label>
@@ -135,10 +126,7 @@
                 <label for="password">Senha</label>
                 <input type="text" placeholder="••••••••••••" value="" name="new_password">
               </div>
-              <div class="input-content">
-                <label for="confirm-password">Confirmar senha</label>
-                <input type="text" placeholder="••••••••••••" name="confirm-password">
-              </div>
+
               <div class="input-content">
                 <label for="email">Email</label>
                 <input type="email" placeholder="example@email.com" value="{{ user[4] if user[4] else ''  }}"
@@ -153,8 +141,8 @@
             </div>
 
             <div class="btn-container">
-              <a id="btn-update" href="{{url_for('update', id=user[0])}}">Atualizar informações</a>
-              <a id="btn-switch" href="{{url_for('logout')}}">Sair</a>
+              <button id="btn-update"">Atualizar informações</button>
+              <a id=" btn-switch" href="{{url_for('logout')}}">Sair</a>
             </div>
           </form>
 

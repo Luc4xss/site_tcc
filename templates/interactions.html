@@ -30,12 +30,73 @@
     </div>
   </div>
 
+  <form action="{{url_for('send_message')}}" method="post">
+    <div class="message-container">
+      <div class="header">
+        <h2>Nova mensagem</h2>
+      </div>
+      <div class="input-container">
+        <input type="text" placeholder="Assunto" name="subject">
+        <hr>
+        <textarea placeholder="Mensagem" name="message-text" id="" required></textarea>
+        <div class="btn-container">
+          <button>Enviar</button>
+          <button type="button" class="message-container-btn">Cancelar</button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
   <div class="container">
+
+    <div class="bottom-bar">
+      <ul>
+        <li class="option"><a href="{{url_for('home')}}"><i class="fa-solid fa-house"> </i>
+            <p>Início</p>
+          </a></li>
+        <li class="option"><a href="{{url_for('ia_page')}}"><i class="fa-solid fa-diamond"></i> </i>
+            <p>IA</p>
+          </a></li>
+        <li class="option create-question-btn"><a href="{{url_for('question_create_page')}}"><i
+              class="fa-solid fa-circle-plus "></i></a></li>
+        <li class="option"><a href="{{url_for('profile', username = session.get('username'))}}"><i
+              class="fa-solid fa-user"></i> </i>
+            <p>Perfil</p>
+          </a></li>
+        <li class="option page"><a href="{{url_for('customization_settings')}}"><i class="fa-solid fa-gear"></i> </i>
+            <p>Opções</p>
+          </a></li>
+      </ul>
+    </div>
+
+    <div class="mobile-side-bar">
+      <div class="main-container">
+        <div class="header-container">
+          <h2>OPÇÕES</h2>
+          <button class="mobile-side-bar-btn"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <ul>
+          <li><a href="{{url_for('customization_settings')}}">Customização</a></li>
+          <li><a href="{{url_for('interactions_settings')}}">Interações</a></li>
+        </ul>
+      </div>
+
+      <ul>
+        <li><a href="">Suporte</a></li>
+        <li><a onclick="resetAppearenceSettings()">Redefinir configuraçoes</a></li>
+      </ul>
+    </div>
+
     <div class="content-header">
       <header class="page-header">
         <a id="back-home-btn" href="{{ url_for('home') }}">
-          < </header>
+          < </a>
+            <button class="mobile-side-bar-btn"><i class="fa-solid fa-bars"></i></button>
+
+      </header>
     </div>
+
     <div class="content">
       <div>
         <div class="left-bar">
@@ -53,7 +114,7 @@
                 </li>
                 <li class="option">
                   <i class="fa-solid fa-triangle-exclamation"></i>
-                  <a href="#">Relatar um erro</a>
+                  <a class="message-container-btn">Suporte</a>
                 </li>
               </ul>
             </div>
@@ -83,6 +144,8 @@
               <select name="interaction-selector" id="interaction-selector">
                 <option value="comment">Comentários</option>
                 <option value="likes">Curtidas</option>
+                <option value="messages">Mensagens</option>
+
               </select>
             </div>
 
@@ -126,7 +189,6 @@
                 </div>
               </div>
               {% endfor %}
-              <hr />
               {% for resposta in respostas %}
               <div class="answer">
                 <header class="answer-header">
@@ -155,6 +217,33 @@
               </div>
               {% endfor %}
             </div>
+
+            <div class="messages-container">
+              {% if mensagens %}
+              {% for mensagem in mensagens %}
+              <div class=" message-container {% if mensagem[4] == 'visualizada' %} seen-message {% endif %}">
+                <div class="text-container">
+                  <div>
+                    <a href="{{url_for('profile', username = mensagem[5])}}">{{mensagem[5]}}</a>
+                    <p class="text"><b>{{mensagem[1]}}</b> - {{mensagem[2]}}</p>
+                  </div>
+                  <p class="date">Enviado em <b>{{mensagem[3]}}</b></p>
+                </div>
+                <div class="btn-container">
+                  <input type="checkbox" checked>
+                  <label>Marcar como lida</label>
+
+                </div>
+
+
+              </div>
+              {% endfor %}
+              {% else %}
+              <h2>Nenhuma mensagem...</h2>
+              {% endif %}
+            </div>
+
+
           </div>
         </div>
       </div>

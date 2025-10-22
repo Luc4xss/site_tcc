@@ -26,9 +26,7 @@
                 <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
               </a>
             </li>
-            <li class="option"><a href="#">
-                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
-              </a></li>
+
             <li class="option page"><a href="{{url_for('question_create_page')}}">
                 <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
               </a></li>
@@ -105,9 +103,19 @@
           <div class="input-container">
             <input type="file" name="imagem" accept="image/*">
 
+            <select name="materia" id="type-selector">
+              <option value="" disabled selected>Tipo</option>
+              <option value="Comentário">Comentário</option>
+              <option value="Pergunta">Pergunta</option>
+            </select>
             <select name="materia" id="subject-selector">
-              <option value="" disabled selected>Selecione uma matéria</option>
+              <option value="" disabled selected>Matéria</option>
               <option value="Curso Técnico">Curso Técnico</option>
+              <option value="Artes">Artes</option>
+              <option value="Biologia">Biologia</option>
+              <option value="Ciências">Ciências</option>
+              <option value="Educação Física">Educação Física</option>
+              <option value="Ensino Religioso">Ensino Religioso</option>
               <option value="Filosofia">Filosofia</option>
               <option value="Física">Física</option>
               <option value="Geografia">Geografia</option>
@@ -116,6 +124,8 @@
               <option value="Matemática">Matemática</option>
               <option value="Português">Português</option>
               <option value="Química">Química</option>
+              <option value="Redação">Redação</option>
+              <option value="Sociologia">Sociologia</option>
             </select>
             <button id="post-question-btn">Faça sua pergunta</button>
           </div>

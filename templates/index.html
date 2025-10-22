@@ -42,11 +42,9 @@
                 <p class="link-text">Página Inicial</p><i class="fa-solid fa-house hide"></i>
               </a>
             </li>
-            <li class="option"><a href="#">
-                <p class="link-text">Fórum</p><i class="fa-solid fa-image hide"></i>
-              </a></li>
+
             <li class="option"><a href="{{url_for('question_create_page')}}">
-                <p class="link-text">Fazer uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
+                <p class="link-text">Faça uma pergunta</p><i class="fa-solid fa-square-plus hide"></i>
               </a></li>
             <li class="option"><a href="{{url_for('ia_page')}}">
                 <p class="link-text">Type IA</p><i class="fa-solid fa-hexagon-nodes hide"></i>
@@ -124,32 +122,37 @@
             </div>
           </form>
 
+          <button class="mobile-notification-btn"><i class="fa-regular fa-bell"></i></button>
+
           <div class="question-picker-container">
             <ul>
+              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Básico')}}">Ensino Básico</a>
+              </li>
               <li><a class="question-topic" href="{{url_for('filter_subject', materia='Curso Técnico')}}">Ensino
                   Técnico</a></li>
-              <li><a class="question-topic" href="{{url_for('filter_subject', materia='Física')}}">Ensino Básico</a>
-              </li>
+
               <li><a class="question-topic" href="{{url_for('home')}}">Geral</a>
               </li>
-              <li><select name="" id="">
-                  <option value="" disabled selected>Selecione uma matéria</option>
-                  <option value="Artes">Artes</option>
-                  <option value="Biologia">Biologia</option>
-                  <option value="Ciências">Ciências</option>
-                  <option value="Educação Física">Educação Física</option>
-                  <option value="Ensino Religioso">Ensino Religioso</option>
-                  <option value="Filosofia">Filosofia</option>
-                  <option value="Física">Física</option>
-                  <option value="Geografia">Geografia</option>
-                  <option value="História">História</option>
-                  <option value="Inglês">Inglês</option>
-                  <option value="Matemática">Matemática</option>
-                  <option value="Português">Português</option>
-                  <option value="Química">Química</option>
-                  <option value="Redação">Redação</option>
-                  <option value="Sociologia">Sociologia</option>
-                </select></li>
+              <form method="get" action="{{ url_for('filter_subject') }}">
+                <li><select name="materia" id="subject-selector" onchange="this.form.submit()"">
+                    <option value="" disabled selected>Selecione uma matéria</option>
+                    <option value=" Artes">Artes</option>
+                    <option value="Biologia">Biologia</option>
+                    <option value="Ciências">Ciências</option>
+                    <option value="Educação Física">Educação Física</option>
+                    <option value="Ensino Religioso">Ensino Religioso</option>
+                    <option value="Filosofia">Filosofia</option>
+                    <option value="Física">Física</option>
+                    <option value="Geografia">Geografia</option>
+                    <option value="História">História</option>
+                    <option value="Inglês">Inglês</option>
+                    <option value="Matemática">Matemática</option>
+                    <option value="Português">Português</option>
+                    <option value="Química">Química</option>
+                    <option value="Redação">Redação</option>
+                    <option value="Sociologia">Sociologia</option>
+                  </select></li>
+              </form>
             </ul>
           </div>
 
@@ -203,8 +206,8 @@
                   <div>
                     <a class="show-responses-btn" href="{{ url_for('show_responses', pergunta_id = pergunta[0]) }}">Ver
                       respostas</a>
-                    <a href="#" class="like-comment-btn" data-id="{{ pergunta[0] }}">
-                      <i class="fa-regular fa-heart"></i>
+                    <a class="like-comment-btn" data-id="{{ pergunta[0] }}">
+                      <i class="{% if pergunta[9] == 1 %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %}"></i>
                     </a>
                     <p class="likes-count">{{ pergunta[7] }}</p>
                   </div>
@@ -227,7 +230,7 @@
                 <div class="user-infos">
                   {{ loop.index }}
                   <img class="user-card-icon" src="/static/imgs/no_photo.png" alt="" />
-                  <p>@{{usuario[0]}}</p>
+                  <a href="{{url_for('profile', username = usuario[0])}}">@{{usuario[0]}}</a>
                 </div>
                 <div class="user-score">
                   <p>{{usuario[1]}}pts</p>

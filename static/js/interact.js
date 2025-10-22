@@ -19,12 +19,10 @@ if (document.querySelector(".like-comment-btn")) {
         if (data.action === "liked") {
           icon.classList.remove("fa-regular");
           icon.classList.add("fa-solid");
-          icon.style.color = "red";
           countElem.innerText = count + 1;
         } else {
           icon.classList.remove("fa-solid");
           icon.classList.add("fa-regular");
-          icon.style.color = "var(--font-color)";
           countElem.innerText = count - 1;
         }
       }
@@ -35,10 +33,12 @@ if (document.querySelector(".like-comment-btn")) {
 // SISTEMA DE NOTIFICAÇÕES
 
 const option_text = document.querySelectorAll(".option .link-text");
-let open = false;
 
 const notification_button = document.querySelector("#notification-btn");
 if (notification_button) {
+
+  let open = false;
+
   notification_button.addEventListener("click", (e) => {
     e.preventDefault();
     console.log(screen.width, screen.height);
@@ -77,6 +77,33 @@ if (notification_button) {
   });
 }
 
+let not_open = false
+
+if (document.querySelector(".mobile-notification-btn")) {
+  open = false
+  const notification_bar = document.querySelector(".notifications-bar")
+  document.querySelectorAll(".mobile-notification-btn").forEach((e) => {
+    e.addEventListener("click", () => {
+      if (open) {
+        notification_bar.style.width = "10%"
+
+        let timeout = setTimeout(() => {
+          notification_bar.style.display = "none"
+
+        }, 100)
+        open = false
+      } else {
+        notification_bar.style.display = "flex"
+        let timeout = setTimeout(() => {
+          notification_bar.style.width = "70%"
+        }, 70)
+        open = true
+      }
+    })
+  })
+
+
+}
 
 // Botão de deletar comentários
 
@@ -90,11 +117,17 @@ let selectedCommentId = null
 function openDeletePopUp(id) {
   selectedCommentId = id
   pop_up_container.style.display = "flex"
+  let timeout = setTimeout(() => {
+    pop_up_container.style.opacity = "1"
+  }, 100)
 }
 
 if (close_pop_up_btn) {
   close_pop_up_btn.addEventListener('click', () => {
-    pop_up_container.style.display = "none"
+    pop_up_container.style.opacity = "0"
+    let timeout = setTimeout(() => {
+      pop_up_container.style.display = "none"
+    }, 100)
     selectedCommentId = null
   });
 }
@@ -124,7 +157,7 @@ if (confirm_delete_btn) {
 
 let about_us = 0
 
-if (document.querySelectorAll(".about-us-btn")) {
+if (document.querySelector(".about-us-btn")) {
   document.querySelectorAll(".about-us-btn").forEach((e) => {
     e.addEventListener("click", () => {
       if (about_us) {
@@ -150,7 +183,7 @@ if (document.querySelectorAll(".about-us-btn")) {
 
 let message_container = false
 
-if (document.querySelectorAll(".message-container-btn")) {
+if (document.querySelector(".message-container-btn")) {
   document.querySelectorAll(".message-container-btn").forEach((e) => {
     e.addEventListener("click", () => {
       if (message_container) {
@@ -163,11 +196,123 @@ if (document.querySelectorAll(".message-container-btn")) {
         document.querySelector("form").style.display = "flex"
         let timeout = setTimeout(() => {
           document.querySelector("form").style.height = "40rem"
-        }, 10)
+        }, 30)
         message_container = true
-
       }
     })
   })
 
 }
+
+// CONTAINER DAS MENSAGENS
+
+
+if (document.querySelector(".inbox-container .message-container")) {
+  document.querySelectorAll(".message-container").forEach((e) => {
+    e.addEventListener("click", () => {
+      if (e.querySelector(".btn-container").style.display == "flex") {
+        e.querySelector(".btn-container").style.display = "none"
+      } else {
+        e.querySelector(".btn-container").style.display = "flex"
+      }
+    })
+
+    e.querySelector("input").addEventListener('click', async (i) => {
+      i.stopPropagation()
+
+      const mensagemId = i.target.dataset.id;
+      console.log(`O ID é ${mensagemId}`)
+
+      try {
+        const response = await fetch(`/atualizar/status/${mensagemId}`, {
+          method: "POST",
+        });
+
+        const data = await response.json();
+        if (data.status === "ok") {
+          console.log("Status atualizado com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao atualizar status:", error);
+      }
+    });
+  });
+}
+
+if (document.querySelector(".message-tab-btn")) {
+  document.querySelector(".message-tab-btn").addEventListener("click", () => {
+    document.querySelector(".inbox-container").style.display = "flex"
+    let timeout = setTimeout(() => {
+      document.querySelector(".inbox-container").style.width = "100%"
+    }, 10)
+
+    document.querySelector(".user-tab-btn").querySelector("i").classList.add("fa-regular")
+    document.querySelector(".user-tab-btn").querySelector("i").classList.remove("fa-solid")
+    document.querySelector(".message-tab-btn").classList.add("selected")
+    document.querySelector(".user-tab-btn").classList.remove("selected")
+
+
+
+    document.querySelector(".message-tab-btn").querySelector("i").classList.add("fa-solid")
+    document.querySelector(".message-tab-btn").querySelector("i").classList.remove("fa-regular")
+
+    document.querySelector(".user-container").style.width = "30%"
+    document.querySelector(".user-container").style.display = "none"
+
+  })
+
+  document.querySelector(".user-tab-btn").addEventListener("click", () => {
+    document.querySelector(".user-container").style.display = "flex"
+    let timeout = setTimeout(() => {
+      document.querySelector(".user-container").style.width = "100%"
+    }, 10)
+
+    document.querySelector(".user-tab-btn").querySelector("i").classList.remove("fa-regular")
+    document.querySelector(".user-tab-btn").querySelector("i").classList.add("fa-solid")
+    document.querySelector(".user-tab-btn").classList.add("selected")
+    document.querySelector(".message-tab-btn").classList.remove("selected")
+
+
+
+    document.querySelector(".message-tab-btn").querySelector("i").classList.remove("fa-solid")
+    document.querySelector(".message-tab-btn").querySelector("i").classList.add("fa-regular")
+
+    document.querySelector(".inbox-container").style.width = "30%"
+    document.querySelector(".inbox-container").style.display = "none"
+
+
+  })
+
+}
+
+// FILTRAR POR MATÉRIAS
+
+
+// BARRA LATERAL PARA MOBILE
+
+
+if (document.querySelector(".mobile-side-bar")) {
+
+  let open = false
+
+  document.querySelectorAll(".mobile-side-bar-btn").forEach((e) => {
+    e.addEventListener("click", () => {
+      if (open) {
+        document.querySelector(".mobile-side-bar").style.width = "10%"
+        let timeout = setTimeout(() => {
+          document.querySelector(".mobile-side-bar").style.display = "none"
+        }, 230)
+        open = false
+      } else {
+        document.querySelector(".mobile-side-bar").style.display = "flex"
+        let timeout = setTimeout(() => {
+          document.querySelector(".mobile-side-bar").style.width = "70%"
+        }, 10)
+        open = true
+      }
+    })
+
+  })
+}
+
+
