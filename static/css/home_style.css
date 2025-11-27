@@ -414,9 +414,41 @@ button {
 
   .comment-container .comment {
     display: flex;
+    flex-direction: column;
     width: 100%;
-    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.05);
+    box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
+    gap: 1rem;
+  }
+
+  .comment .answer-with-ia-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+
+  .comment .answer-with-ia-btn i {
+    font-size: 1.8rem;
+  }
+
+  .comment-container .comment .ia-answer-box {
+    display: none;
+    padding: 1rem;
+    font-size: 1.8rem;
+    border-top: .2rem solid var(--sec-bg);
+  }
+
+  .comment-container .comment .ia-answer-box h3 {
+    font-size: 2rem;
+  }
+
+
+  .ia-answer-box ul li {
+    margin-left: 2.3rem;
   }
 
   .dark .comment-container .comment {
@@ -487,8 +519,8 @@ button {
 
   .question-body img {
     padding: 1rem;
-    width: 85%;
-    height: 85%;
+    width: 50%;
+    height: 20%;
     align-self: center;
     background-color: var(--sec-bg);
     border-radius: .6rem;
@@ -913,6 +945,7 @@ button {
 
   .comment-container .comment {
     display: flex;
+    flex-direction: column;
     width: 100%;
     box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;

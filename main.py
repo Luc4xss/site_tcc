@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 import json
 from flask_cors import CORS
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -39,12 +40,10 @@ mysql = MySQL(app)
 
 @app.route('/')
 def home():
-    print(session.get('cargo'))
     session.permanent = True
     username = session.get('username')
 
     if username:
-        print(session['username'])
         cursor = mysql.connection.cursor()
         cursor.execute("""
         SELECT p.id, p.titulo, p.texto, p.cargo, p.materia, p.data_de_publicacao, p.imagem,
@@ -322,8 +321,6 @@ def update(id):
             'new_email': request.form.get('new_email')
         }
 
-        print(new_user)
-
         cursor = mysql.connection.cursor()
         session['username'] = new_user['new_username']
 
@@ -466,8 +463,6 @@ def like_comment(comentario_id):
 @app.route('/comment/id=<int:pergunta_id>')
 def show_responses(pergunta_id):
     
-    print(pergunta_id)
-
     cursor = mysql.connection.cursor()
 
     cursor.execute("""
@@ -505,7 +500,6 @@ def show_responses(pergunta_id):
 
 @app.route('/answer/comment/id=<int:pergunta_id>', methods = ['GET', 'POST'])
 def post_answer(pergunta_id):
-    print(f'id do comentario: {pergunta_id}')
     resposta = {
         "texto": request.form.get('comment-response'),
         "usuario_id": session.get('user_id'),
@@ -764,7 +758,14 @@ def perguntar():
             ]
         }
 
+        inicio = time.time()  # marca o início da requisição
         resposta = requests.post(GEMINI_URL, headers=headers, data=json.dumps(payload))
+        fim = time.time()     # marca o fim da requisição
+
+        tempo_resposta = fim - inicio  # tempo em segundos
+        print(f"O tempo de resposta foi de: {tempo_resposta}")
+
+
 
         if resposta.status_code == 200:
             conteudo = resposta.json()["candidates"][0]["content"]["parts"][0]["text"]

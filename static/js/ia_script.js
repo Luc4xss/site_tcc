@@ -12,28 +12,33 @@ const user_question = document.querySelector(".user-question-container");
 const ia_answer = document.querySelector(".ia-response-container");
 
 // EVENTO DO TEXT AREA
+if (script_text) {
+  script_text.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      enviarMensagem();
 
-script_text.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    enviarMensagem();
+    }
+  });
+}
 
-  }
-});
 
 // EVENTO DE SELEÇÃO DE PROMPT
 
-prompt_selector.addEventListener("change", () => {
-  if (
-    prompt_selector.value == "Olá, crie um código: " ||
-    prompt_selector.value == "Olá, traduza meu código: "
-  ) {
-    document.querySelector("#language-selector").classList.remove("hide");
-  } else {
-    document.querySelector("#language-selector").classList.add("hide");
-    language_selector.value = "";
-  }
-});
+if (prompt_selector) {
+  prompt_selector.addEventListener("change", () => {
+    if (
+      prompt_selector.value == "Olá, crie um código: " ||
+      prompt_selector.value == "Olá, traduza meu código: "
+    ) {
+      document.querySelector("#language-selector").classList.remove("hide");
+    } else {
+      document.querySelector("#language-selector").classList.add("hide");
+      language_selector.value = "";
+    }
+  });
+}
+
 
 // EVENTO DE ENVIO DA MENSAGEM PARA A IA
 
@@ -127,23 +132,71 @@ const enviarMensagem = async (e) => {
   }
 };
 
-send_button.addEventListener("click", enviarMensagem);
+if (send_button) {
+  send_button.addEventListener("click", enviarMensagem);
+
+}
 
 
 const close_left_bar_btn = document.querySelector("#close-left-bar-btn")
 const open_left_bar_btn = document.querySelector("#open-left-bar-btn")
 
 const left_bar = document.querySelector(".left-bar")
-close_left_bar_btn.addEventListener('click', () => {
-  left_bar.style.width = "10%"
-  let timeout = setTimeout(() => {
-    left_bar.style.display = "none"
-  }, 100)
-})
+if (close_left_bar_btn) {
+  close_left_bar_btn.addEventListener('click', () => {
+    left_bar.style.width = "10%"
+    let timeout = setTimeout(() => {
+      left_bar.style.display = "none"
 
-open_left_bar_btn.addEventListener('click', () => {
-  left_bar.style.display = "flex"
-  let timeout = setTimeout(() => {
-    left_bar.style.width = "70%"
-  }, 10)
-})
+    }, 100)
+  })
+
+  open_left_bar_btn.addEventListener('click', () => {
+    left_bar.style.display = "flex"
+    let timeout = setTimeout(() => {
+      left_bar.style.width = "70%"
+    }, 10)
+  })
+}
+
+
+// RESPOSTA DA PERGUNTA COM IA
+
+document.querySelectorAll(".answer-with-ia-btn").forEach(botao => {
+  botao.addEventListener("click", async () => {
+    const comment = botao.closest(".comment");
+    const texto = comment.querySelector(".comment-text").innerText;
+    const box = comment.querySelector(".ia-answer-box");
+
+    box.style.display = "block";
+    box.innerHTML = "<p>Gerando resposta com IA...</p>";
+
+    try {
+      const response = await fetch("/perguntar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pergunta: texto })
+      });
+
+      const data = await response.json();
+
+      if (data.resposta) {
+        box.innerHTML = "<h3>RESPOSTA DA INTELIGÊNCIA ARTIFICIAL</h3>" + marked.parse(data.resposta);
+        const comment_container = document.querySelector(".comment-container")
+
+        comment_container.scrollTo({
+          top: box.scrollHeight,
+          behavior: "smooth"
+        });
+
+        botao.style.display = "none"
+
+      } else {
+        box.innerHTML = `<p>Erro: ${data.erro}</p>`;
+      }
+
+    } catch (error) {
+      box.innerHTML = "<p>Erro ao gerar resposta...</p>";
+    }
+  });
+});

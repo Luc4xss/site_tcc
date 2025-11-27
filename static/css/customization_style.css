@@ -282,6 +282,14 @@ html {
     background-color: var(--blue);
   }
 
+  .pop-up-container .about-us-container h2 {
+    font-size: 2.4rem;
+  }
+
+  .pop-up-container .about-us-container p {
+    font-size: 1.8rem;
+  }
+
   form {
     display: none;
     position: absolute;

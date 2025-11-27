@@ -180,7 +180,8 @@
                     </div>
                     <div>
                       <p>publicado em <b>{{ pergunta[5] }}</b></p>
-                      {% if session.get('username') == pergunta[8]%}
+                      <button class="answer-with-ia-btn"><i class="fa-solid fa-star"></i></button>
+                      {% if session.get('username') == pergunta[8] or session.get('cargo') == 'ADMINISTRADOR'%}
                       <button id="delete-comment-btn" onclick="openDeletePopUp('{{pergunta[0]}}')"><i
                           class="fa-solid fa-trash"></i></button>
                       {% endif %}
@@ -193,14 +194,13 @@
                       <h2 class="question-title">{{ pergunta[1] }}</h2>
                     </div>
                     <div class="question-body">
-                      <p id="comment-text">{{ pergunta[2] }}</p>
+                      <p class="comment-text">{{ pergunta[2] }}</p>
                       {% if pergunta[6] %}
                       <img src="{{ url_for('static', filename=pergunta[6]) }}" alt="imagem da pergunta">
                       {% endif %}
                     </div>
                   </div>
                 </div>
-
 
                 <div class="comment-footer">
                   <div>
@@ -214,6 +214,11 @@
 
                   <p>{{ pergunta[4] }}</p>
                 </div>
+
+              </div>
+
+              <div class="ia-answer-box">
+
               </div>
             </div>
             {% endfor %}
@@ -251,6 +256,9 @@
 
   <script src="/static/js/appearance.js"></script>
   <script src="/static/js/interact.js"></script>
+  <script src="/static/js/ia_script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 
 
 </body>
