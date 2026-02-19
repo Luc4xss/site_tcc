@@ -8,10 +8,16 @@ import json
 from flask_cors import CORS
 import time
 
+import os
+from dotenv import load_dotenv
+from datetime import timedelta
+
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app)
 
-import os
+
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 
@@ -27,13 +33,19 @@ def allowed_file(filename):
     ext = filename.rsplit('.', 1)[1].lower()
     return ext in ALLOWED_EXTENSIONS
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'  # usuário do MySQL
-app.config['MYSQL_PASSWORD'] = 'LucasPlay123'  # senha do MySQL
-app.config['MYSQL_DB'] = 'meu_banco_tcc'  # nome do banco de dados
-app.secret_key = 'sua_chave_secreta_aqui'
+app.config['UPLOAD_FOLDER'] = os.getenv("UPLOAD_FOLDER")
+
+app.config['MYSQL_HOST'] = os.getenv("MYSQL_HOST")
+app.config['MYSQL_USER'] = os.getenv("MYSQL_USER")
+app.config['MYSQL_PASSWORD'] = os.getenv("MYSQL_PASSWORD")
+app.config['MYSQL_DB'] = os.getenv("MYSQL_DB")
+
+app.secret_key = os.getenv("SECRET_KEY")
 app.permanent_session_lifetime = timedelta(days=7)
+
+API_KEY = os.getenv("API_KEY")
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
+
 
 mysql = MySQL(app)
 
@@ -737,10 +749,6 @@ def send_message():
 
 
 
-
-
-API_KEY = "AIzaSyDEvmkzQAj6Us0uy5auYjtm1laJDCLYPg8"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
 
 @app.route("/perguntar", methods=["POST"])
 def perguntar():
